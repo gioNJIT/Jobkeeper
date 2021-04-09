@@ -5,7 +5,7 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 
 api_key = os.getenv('api_key')
-BASE_URL = 'https://jooble.org/api/a7203d29-d277-4d34-a2ba-4b79649682c5'
+BASE_URL = 'https://jooble.org/api/' + api_key
 
 params = {
 		"keywords": "Accountant",
