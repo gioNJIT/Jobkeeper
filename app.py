@@ -64,8 +64,3 @@ job_details = {
 }
 
 print(job_details)
-
-#for job in all_jobs:
-#    print(job['title'])
-
-#print(all_jobs)
