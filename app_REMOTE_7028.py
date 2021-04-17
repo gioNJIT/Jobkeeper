@@ -3,23 +3,18 @@ import json
 import os
 from dotenv import load_dotenv,find_dotenv
 import flask
-import requests
+
 from authlib.client import OAuth2Session
 import google.oauth2.credentials
 import googleapiclient.discovery
+
 import google_auth
-from Jooble_api import get_job_data
-
 load_dotenv(find_dotenv())
-
 app = flask.Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.secret_key = os.getenv("FN_FLASK_SECRET_KEY", default=False)
+
 app.register_blueprint(google_auth.app)
-
-
-
-
 
 @app.route('/')
 def index():
@@ -33,9 +28,7 @@ def index():
         #return '<div>You are currently logged in as ' + user_info['given_name'] + '<div><pre>' + json.dumps(user_info, indent=4) + "</pre>"
         return "You Loged in"
     
-    job_details = get_job_data()
-
-    print(job_details)
+    #return google_auth.logout()
     
     
 app.run(
@@ -43,4 +36,3 @@ app.run(
     port=int(os.getenv("PORT",8080)),
     debug=True,
     )
-
