@@ -33,7 +33,9 @@ def index():
         #return '<div>You are currently logged in as ' + user_info['given_name'] + '<div><pre>' + json.dumps(user_info, indent=4) + "</pre>"
         return "You Loged in"
     
-    job_details = get_job_data()
+    
+    
+    job_details = get_job_data()  #Getting the Data from the Jooble API call
 
     print(job_details)
     

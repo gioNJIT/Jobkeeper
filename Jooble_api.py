@@ -10,6 +10,8 @@ def get_job_data():
     api_key = os.getenv('api_key')
     BASE_URL = 'https://jooble.org/api/' + api_key
     
+    
+    #Setting all the query parameter for the API call
     params = {
     		"keywords": "Accountant",
     		"location": "New Jersey",
@@ -17,14 +19,17 @@ def get_job_data():
     		"salary": "200000",
     		"page": "1"
      }
+     
+     
     
-    response = requests.post(BASE_URL, json=params)
-    data = response.json()
+    response = requests.post(BASE_URL, json=params)  #Making a call to the Joooble API using POST request
+    data = response.json() # Converting the response into the json
     
     total_result = data['totalCount']
     all_jobs = data['jobs']
     
     
+    #All the functions for extracting data from the json response
     def get_job_title(all_jobs):
         return all_jobs['title']
     
@@ -54,6 +59,8 @@ def get_job_data():
     job_companies = map(get_job_company, all_jobs)
     job_ids = map(get_job_id, all_jobs)
     
+    
+    #returning the all data (List) for all jobs in one dictionary
     return {
         'total_jobs': total_result,
         'titles' : list(job_titles),
