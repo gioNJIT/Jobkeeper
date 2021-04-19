@@ -1,9 +1,11 @@
 import React, { Fragment } from "react";
 import './App.css';
+import io from "socket.io-client";
 import Login from './Login';
 import  { useState } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
 
+const socket = io();
 
 function App() {
 
@@ -65,7 +67,9 @@ const Home = () => {
       list.push(radius);
       list.push(salary);
       setform(list);
-    
+      
+      socket.emit("sendParams", {userParams: list})
+      
       setTimeout(() => {
         setSubmitting(false);
       }, 3000);
@@ -92,6 +96,7 @@ const Home = () => {
           {ourform.map((objects) => (
               objects
             ))}
+            
       </div>
         
           

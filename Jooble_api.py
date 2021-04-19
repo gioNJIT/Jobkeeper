@@ -5,26 +5,30 @@ import requests
 
 load_dotenv(find_dotenv())
 
-def get_job_data():
+def get_job_data(paramList):
+    jobName = str(paramList[0])
+    jobLocation = str(paramList[1])
+    jobRadius = str(paramList[2])
+    jobSalary = str(paramList[3])
 
     api_key = os.getenv('api_key')
-    BASE_URL = 'https://jooble.org/api/' + api_key
+    BASE_URL = 'https://jooble.org/api/' + str(api_key)
     
     
-    #Setting all the query parameter for the API call
+    # Setting all the query parameter for the API call
     params = {
-    		"keywords": "Accountant",
-    		"location": "New Jersey",
-    		"radius": "50",
-    		"salary": "200000",
+    		"keywords": jobName,
+    		"location": jobLocation,
+    		"radius": jobRadius,
+    		"salary": jobSalary,
     		"page": "1"
      }
-     
+
      
     
     response = requests.post(BASE_URL, json=params)  #Making a call to the Joooble API using POST request
     data = response.json() # Converting the response into the json
-    
+    print(data)
     total_result = data['totalCount']
     all_jobs = data['jobs']
     
@@ -45,8 +49,8 @@ def get_job_data():
     def get_job_link(all_jobs):
         return all_jobs['link']
     
-    def get_job_company(all_jobs):
-        return all_jobs['company']
+    # def get_job_company(all_jobs):
+    #     return all_jobs['company']
         
     def get_job_id(all_jobs):
         return all_jobs['id']
@@ -56,7 +60,7 @@ def get_job_data():
     job_salaries = map(get_job_salary, all_jobs)
     job_types = map(get_job_type, all_jobs)
     job_links = map(get_job_link, all_jobs)
-    job_companies = map(get_job_company, all_jobs)
+    # job_companies = map(get_job_company, all_jobs)
     job_ids = map(get_job_id, all_jobs)
     
     
@@ -68,7 +72,7 @@ def get_job_data():
         'salaries' : list(job_salaries),
         'types' : list(job_types),
         'links' : list(job_links),
-        'companies' : list(job_companies),
+        # 'companies' : list(job_companies),
         'ids' : list(job_ids),
         
     }
