@@ -46,7 +46,7 @@ def index():
     
 @socketio.on('UserLoggedIn')
 def on_UserLoggedIn():
-    socketio.emit('UserLoggedIn', broadcast=True, include_self=False)
+    socketio.emit('UserLoggedIn', broadcast=True, include_self=True)
     print("user has logged in")
     
     

@@ -11,12 +11,13 @@ function App() {
 
   
     const jobDataTest = "this is a job posting"; //this is mocking the job posting data that will be passed to the components
-    const [isAuthenticated, setisAuthenticated] = useState(false); //thi is mocking the login authentication. change to false to test
+    var isAuthenticated = false; //thi is mocking the login authentication. change to false to test
     
   
     useEffect(() => {
     socket.on("UserLoggedIn", (fromServer) => {
-      setisAuthenticated(true);
+      isAuthenticated = true;
+      console.log(isAuthenticated);
       
       
       
