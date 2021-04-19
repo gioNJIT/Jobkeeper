@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import './App.css';
 import Login from './Login';
-import favorites from './favorites';
 import  { useState } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
 

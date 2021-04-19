@@ -2,7 +2,9 @@
 
 ## Requirements
 1. `npm install`
-2. `pip install -r requirements.txt`
+2. `npm install react-google-login`
+3. `npm install react-router-dom`
+4. `pip install -r requirements.txt`
 
 ## Launching Google API
 First, `pip install -r requirements.txt`
