@@ -9,15 +9,24 @@ import google.oauth2.credentials
 import googleapiclient.discovery
 import google_auth
 from Jooble_api import get_job_data
+from flask_socketio import SocketIO
+from flask_cors import CORS
 
 load_dotenv(find_dotenv())
+
+parameterList = []
+
 
 app = flask.Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.secret_key = os.getenv("FN_FLASK_SECRET_KEY", default=False)
 app.register_blueprint(google_auth.app)
 
-
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
+socketio = SocketIO(app,
+                    cors_allowed_origins="*",
+                    json=json,
+                    manage_session=False)
 
 
 
@@ -35,14 +44,34 @@ def index():
     
     
     
-    job_details = get_job_data()  #Getting the Data from the Jooble API call
-
+@socketio.on('UserLoggedIn')
+def on_UserLoggedIn():
+    socketio.emit('UserLoggedIn', broadcast=True, include_self=False)
+    print("user has logged in")
+    
+    
+    
+@socketio.on('connect')
+def on_connected():
+    """
+    handle when user connects to server
+    """
+    print('User connected!')   
+    
+    
+    
+@socketio.on('sendParams')
+def receiveParams(data):
+    parameterList = data["userParams"]
+    job_details = get_job_data(parameterList)
     print(job_details)
     
     
-app.run(
-    host=os.getenv('IP',"0.0.0.0"),
-    port=int(os.getenv("PORT",8080)),
-    debug=True,
-    )
+    
+    
+socketio.run(
+    app,
+    host=os.getenv('IP', '0.0.0.0'),
+    port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
+)
 
