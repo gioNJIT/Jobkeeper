@@ -6,28 +6,6 @@ import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } fro
 
 
 function App() {
-    
-  const [occupation, setoccupation] = useState(); //these are the react states that hold the form information
-  const [location, setlocation] = useState();
-  const [radius, setradius] = useState();
-  const [salary, setsalary] = useState();
-  const [ourform, setform] = useState([]);
-  const [submitting, setSubmitting] = useState(false); //this is the bool that gets used after the user clicks submit. it sends a message to user.
-  const isLogedIn = false;
-  const handleSubmit = event => { //This function is called when the submit button is pressed. It creates a List from the form information and stores it in "ourform"
-    event.preventDefault();
-   setSubmitting(true);
-   var list=[];
-   list.push(occupation);
-   list.push(location);
-   list.push(radius);
-   list.push(salary);
-   setform(list);
-
-   setTimeout(() => {
-     setSubmitting(false);
-   }, 3000);
- };
 
   
     const jobDataTest = "this is a job posting"; //this is mocking the job posting data that will be passed to the components
