@@ -19,7 +19,7 @@ function App() {
     <Router>  
         <div>
         <nav>
-            <Link to={`/Home/${submitting,handleSubmit,occupation,setoccupation,location,setlocation,radius,setradius,salary,setsalary}`}>Home</Link>|
+            <Link to="/Home">Home</Link>|
             <Link to={`/about/${jobDataTest}`}>About</Link>|
             <Link to="/Login">Login</Link>|
             <Link to="/Favorites">Favorites</Link>
@@ -29,7 +29,7 @@ function App() {
             {
             isAuthenticated ? 
             <>
-            <Route path="/Home/:submitting:handleSubmit:occupation:setoccupation():location:setlocation:radius:setradius:salary:setsalary" exact component={Home} />
+            <Route path="/Home" component={Home} />
             <Route path="/about/:jobDataTest"  component={About} />
             <Route path="/Favorites"  component={Favorites} />
             </> : <Redirect to="/Login" />
