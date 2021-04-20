@@ -22,8 +22,9 @@ function App() {
       
     });
 
-  }, []);
+  }, [isAuthenticated]);
   
+  console.log(isAuthenticated);
   
   return (
     <Router>  
