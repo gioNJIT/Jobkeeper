@@ -2,14 +2,17 @@ import React, { Fragment } from "react";
 import './App.css';
 import io from "socket.io-client";
 import Login from './Login';
+import { ListItem } from './ListItem';
 import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
 
 export const socket = io();
 
+
+
 function App() {
 
-  
+   
     const jobDataTest = "this is a job posting"; //this is mocking the job posting data that will be passed to the components
     const [isAuthenticated, setIsAuthenticated] = useState(false); //thi is mocking the login authentication. change to false to test
     
@@ -25,6 +28,8 @@ function App() {
 
   }, [isAuthenticated]);
   
+  
+  console.log(isAuthenticated);
   
   return (
     <Router>  
@@ -50,6 +55,7 @@ function App() {
             
         </Switch>
           
+         
         
           </div>
     </Router>      
@@ -62,6 +68,7 @@ function App() {
 const Home = () => {
 
     const [occupation, setoccupation] = useState(); //these are the react states that hold the form information
+    const [job_details,set_job_details] = useState([]);
     const [location, setlocation] = useState();
     const [radius, setradius] = useState();
     const [salary, setsalary] = useState();
@@ -78,12 +85,26 @@ const Home = () => {
       list.push(salary);
       setform(list);
       
-      socket.emit("sendParams", {userParams: list})
+      socket.emit("sendParams", {userParams: list});
       
       setTimeout(() => {
         setSubmitting(false);
       }, 3000);
     };
+    
+     useEffect(() => {
+       
+       
+    socket.on("Updated_details", (data) => {
+      console.log("It is runnig!!!!");
+      set_job_details(data);
+      
+      
+      
+      
+    });
+
+  }, []);
 
     return (
       <Fragment>
@@ -103,15 +124,16 @@ const Home = () => {
             </fieldset>
             <button type="submit">Submit</button>
           </form>
-          {ourform.map((objects) => (
-              objects
-            ))}
+          <div>
+            <p> Hello there </p>
+           { job_details.map((item, index) => <ListItem key={index} name={item} />)}
+          </div>
             
       </div>
         
           
       </Fragment> 
-)  
+);  
 };
 
 
