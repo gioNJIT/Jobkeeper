@@ -2,7 +2,7 @@ import functools
 import json
 import os
 from dotenv import load_dotenv,find_dotenv
-import flask
+from flask import Flask, send_from_directory
 import requests
 from Jooble_api import get_job_data
 from flask_socketio import SocketIO
@@ -13,7 +13,7 @@ load_dotenv(find_dotenv())
 parameterList = []
 
 
-app = flask.Flask(__name__)
+app = Flask(__name__, static_folder='./build/static')
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 
@@ -26,6 +26,11 @@ socketio = SocketIO(app,
 
 @app.route('/', defaults={"filename": "index.html"})
 @app.route('/<path:filename>')
+def index(filename):
+    '''
+    This is a index function
+    '''
+    return send_from_directory('./build', filename)
 
     
     
