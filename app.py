@@ -15,8 +15,7 @@ parameterList = []
 
 app = flask.Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-app.secret_key = os.getenv("FN_FLASK_SECRET_KEY", default=False)
-app.register_blueprint(google_auth.app)
+
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 socketio = SocketIO(app,
