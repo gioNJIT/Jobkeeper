@@ -24,7 +24,8 @@ socketio = SocketIO(app,
                     manage_session=False)
 
 
-
+@app.route('/', defaults={"filename": "index.html"})
+@app.route('/<path:filename>')
 
     
     
