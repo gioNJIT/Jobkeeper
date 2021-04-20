@@ -65,7 +65,9 @@ def on_connected():
 def receiveParams(data):
     parameterList = data["userParams"]
     job_details = get_job_data(parameterList)
-    print(job_details)
+    title_arr = job_details['titles']
+    socketio.emit( "Updated_details",title_arr, broadcast=True, include_self=True)
+    print(job_details['titles'])
     
     
     
