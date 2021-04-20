@@ -4,7 +4,6 @@ import os
 from dotenv import load_dotenv,find_dotenv
 import flask
 import requests
-import google_auth
 from Jooble_api import get_job_data
 from flask_socketio import SocketIO
 from flask_cors import CORS
