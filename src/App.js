@@ -2,19 +2,28 @@ import React, { Fragment } from "react";
 import './App.css';
 import io from "socket.io-client";
 import Login from './Login';
-import  { useState } from 'react';
+import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
 
-const socket = io();
+export const socket = io();
 
 function App() {
 
   
     const jobDataTest = "this is a job posting"; //this is mocking the job posting data that will be passed to the components
-    const isAuthenticated = true; //thi is mocking the login authentication. change to false to test
+    const [isAuthenticated, setIsAuthenticated] = useState(false); //thi is mocking the login authentication. change to false to test
     
   
-  
+    useEffect(() => {
+    socket.on("UserLoggedIn", (fromServer) => {
+      setIsAuthenticated(true);
+      
+      
+      
+      
+    });
+
+  }, [isAuthenticated]);
   
   
   return (
@@ -31,6 +40,7 @@ function App() {
             {
             isAuthenticated ? 
             <>
+            <Redirect to="/Home" />
             <Route path="/Home" component={Home} />
             <Route path="/about/:jobDataTest"  component={About} />
             <Route path="/Favorites"  component={Favorites} />

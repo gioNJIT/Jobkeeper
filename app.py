@@ -35,6 +35,12 @@ def index(filename):
     
     
     
+@socketio.on('UserLoggedIn')
+def on_UserLoggedIn():
+    socketio.emit('UserLoggedIn', broadcast=True, include_self=True)
+    print("user has logged in")
+    
+    
     
 @socketio.on('connect')
 def on_connected():
