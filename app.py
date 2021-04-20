@@ -4,9 +4,6 @@ import os
 from dotenv import load_dotenv,find_dotenv
 import flask
 import requests
-from authlib.client import OAuth2Session
-import google.oauth2.credentials
-import googleapiclient.discovery
 import google_auth
 from Jooble_api import get_job_data
 from flask_socketio import SocketIO
@@ -30,17 +27,7 @@ socketio = SocketIO(app,
 
 
 
-@app.route('/')
-def index():
-    if not google_auth.is_logged_in():
-        Login=google_auth.login()
-        return  Login
-        
-    #if google_auth.is_logged_in():
-    else:
-        #user_info = google_auth.get_user_info()
-        #return '<div>You are currently logged in as ' + user_info['given_name'] + '<div><pre>' + json.dumps(user_info, indent=4) + "</pre>"
-        return "You Loged in"
+
     
     
     
