@@ -1,12 +1,11 @@
 import React, { Fragment } from "react";
 import './App.css';
-import io from "socket.io-client";
 import Login from './Login';
 import { ListItem } from './ListItem';
 import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
 
-export const socket = io();
+
 
 
 
@@ -17,16 +16,7 @@ function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false); //thi is mocking the login authentication. change to false to test
     
   
-    useEffect(() => {
-    socket.on("UserLoggedIn", (fromServer) => {
-      setIsAuthenticated(true);
-      
-      
-      
-      
-    });
 
-  }, [isAuthenticated]);
   
   
   console.log(isAuthenticated);
@@ -85,26 +75,14 @@ const Home = () => {
       list.push(salary);
       setform(list);
       
-      socket.emit("sendParams", {userParams: list});
+
       
       setTimeout(() => {
         setSubmitting(false);
       }, 3000);
     };
     
-     useEffect(() => {
-       
-       
-    socket.on("Updated_details", (data) => {
-      console.log("It is runnig!!!!");
-      set_job_details(data);
-      
-      
-      
-      
-    });
 
-  }, []);
 
     return (
       <Fragment>

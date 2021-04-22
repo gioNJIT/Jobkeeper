@@ -1,4 +1,3 @@
-import { socket } from './App.js';
 import React from 'react';
 
 import { GoogleLogin } from 'react-google-login';
@@ -10,12 +9,12 @@ const clientId =
 function Login() {
   const onSuccess = (res) => {
     console.log('Login Success: currentUser:', res.profileObj);
-    socket.emit("UserLoggedIn")
+    
   };
 
   const onFailure = (res) => {
     console.log('Login failed: res:', res);
-    socket.emit("UserLoggedIn")
+    
   };
 
   return (
