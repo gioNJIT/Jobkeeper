@@ -5,6 +5,7 @@ import { ListItem } from './ListItem';
 import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
 
+const BASE_URL = "/api/v1/job"
 
 
 
@@ -13,8 +14,10 @@ function App() {
 
    
     const jobDataTest = "this is a job posting"; //this is mocking the job posting data that will be passed to the components
-    const [isAuthenticated, setIsAuthenticated] = useState(false); //thi is mocking the login authentication. change to false to test
+    const [isAuthenticated, setIsAuthenticated] = useState(true); //thi is mocking the login authentication. change to false to test
     
+    
+  
   
 
   
@@ -64,7 +67,7 @@ const Home = () => {
     const [salary, setsalary] = useState();
     const [ourform, setform] = useState([]);
     const [submitting, setSubmitting] = useState(false); //this is the bool that gets used after the user clicks submit. it sends a message to user.
-    const isLogedIn = false;
+    const isLogedIn = true;
     const handleSubmit = event => { //This function is called when the submit button is pressed. It creates a List from the form information and stores it in "ourform"
       event.preventDefault();
       setSubmitting(true);
@@ -75,6 +78,7 @@ const Home = () => {
       list.push(salary);
       setform(list);
       
+      searchJob(occupation, location, radius, salary);
 
       
       setTimeout(() => {
@@ -82,7 +86,20 @@ const Home = () => {
       }, 3000);
     };
     
-
+  function searchJob(occupation, location, radius, salary) {
+      const url = BASE_URL + "/searchJob" + "?occupation=" + occupation + "&location=" + location + "&radius=" + radius + "&salary=" + salary;
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+      .then(response => {
+        
+      }).then(responseData => {
+        console.log(responseData);
+      });
+    }
 
     return (
       <Fragment>

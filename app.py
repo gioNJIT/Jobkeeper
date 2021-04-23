@@ -33,6 +33,12 @@ def index(filename):
     
     
     
+@app.route('/api/v1/job/searchJob', methods=['GET'])
+def searchJob():
+    print("Params received")
+    return "test"
+    
+    
 # @socketio.on('UserLoggedIn')
 # def on_UserLoggedIn():
 #     socketio.emit('UserLoggedIn', broadcast=True, include_self=True)
