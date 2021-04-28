@@ -28,7 +28,7 @@ db = SQLAlchemy(app)
 
 # IMPORTANT: This must be AFTER creating db variable to prevent
 # circular import issues
-from models import Person
+import models  # pylint: disable=wrong-import-position
 
 
 
@@ -62,6 +62,22 @@ def searchJob():
     print("Params received")
     return "test"
     
+
+
+
+"""EXAMPLE FUNCTION TO BE USED TO RETREIVE DATA FROM DATABASE"""    
+def add_users():
+    """this was taken out of leaderboardsocket listener and made its own function"""
+    player = models.Person.query.filter_by(id=123321).first()
+    if player is None:
+        print("could not find id number")
+        #addplayer = models.Person(username=data['user'], score=100)
+        #DB.session.add(addplayer)  # pylint: disable=no-member
+        #DB.session.commit()  # pylint: disable=no-member
+    else:
+        print("player")
+        print(player.id)
+    
     
 # @socketio.on('UserLoggedIn')
 # def on_UserLoggedIn():
@@ -69,7 +85,7 @@ def searchJob():
 #     print("user has logged in")
     
     
-    
+add_users() 
 
     
     
