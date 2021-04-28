@@ -5,7 +5,7 @@ import Logout from './Logout';
 import { ListItem } from './ListItem';
 import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
-
+import fetch from 'isomorphic-fetch';
 const BASE_URL = "/api/v1/job"
 
 
@@ -45,6 +45,9 @@ function App() {
             <Route path="/about/:jobDataTest"  component={About} />
             <Route path="/Favorites"  component={Favorites} />
             <Route path="/Logout"  component={Logout} />
+            <Route path="/about/:jobDataTest"  component={About} />
+            <Route path="/Favorites"  component={Favorites} />
+
             </> : <Redirect to="/Login" />
             }
       
