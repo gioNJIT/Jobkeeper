@@ -1,10 +1,11 @@
 import React, { Fragment } from "react";
 import './App.css';
 import Login from './Login';
+import Logout from './Logout';
 import { ListItem } from './ListItem';
 import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
-
+import fetch from 'isomorphic-fetch';
 const BASE_URL = "/api/v1/job"
 
 
@@ -31,7 +32,8 @@ function App() {
             <Link to="/Home">Home</Link>|
             <Link to={`/about/${jobDataTest}`}>About</Link>|
             <Link to="/Login">Login</Link>|
-            <Link to="/Favorites">Favorites</Link>
+            <Link to="/Favorites">Favorites</Link>|
+            <Link to="/Logout">Logout</Link>
         </nav>
         <Switch>
             <Route path="/Login"  component={Login} />
@@ -42,6 +44,10 @@ function App() {
             <Route path="/Home" component={Home} />
             <Route path="/about/:jobDataTest"  component={About} />
             <Route path="/Favorites"  component={Favorites} />
+            <Route path="/Logout"  component={Logout} />
+            <Route path="/about/:jobDataTest"  component={About} />
+            <Route path="/Favorites"  component={Favorites} />
+
             </> : <Redirect to="/Login" />
             }
       
