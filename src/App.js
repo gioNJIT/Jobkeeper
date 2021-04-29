@@ -5,7 +5,8 @@ import Logout from './Logout';
 import { ListItem } from './ListItem';
 import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
-import fetch from 'isomorphic-fetch';
+import { Jobs } from './Jobs';
+//import fetch from 'isomorphic-fetch';
 const BASE_URL = "/api/v1/job"
 
 
@@ -101,9 +102,11 @@ const Home = () => {
         },
       })
       .then(response => {
-        
+        return response.json();
       }).then(responseData => {
         console.log(responseData);
+        
+        set_job_details(responseData[0]);
       });
     }
 
@@ -126,8 +129,9 @@ const Home = () => {
             <button type="submit">Submit</button>
           </form>
           <div>
-            <p> Hello there </p>
            { job_details.map((item, index) => <ListItem key={index} name={item} />)}
+           <Jobs />
+           <p>Heyy there!!!</p>
           </div>
             
       </div>

@@ -2,7 +2,7 @@ import functools
 import json
 import os
 from dotenv import load_dotenv,find_dotenv
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, request, jsonify, Response
 import requests
 from Jooble_api import get_job_data
 from flask_cors import CORS
@@ -28,15 +28,13 @@ db = SQLAlchemy(app)
 
 # IMPORTANT: This must be AFTER creating db variable to prevent
 # circular import issues
-import models  # pylint: disable=wrong-import-position
+#import models  # pylint: disable=wrong-import-position
 
 
 
 
 
 
-
-parameterList = []
 
 
 app = Flask(__name__, static_folder='./build/static')
@@ -59,15 +57,32 @@ def index(filename):
     
 @app.route('/api/v1/job/searchJob', methods=['GET'])
 def searchJob():
-    print("Params received")
-    return "test"
+    parameterList = []
+    if 'occupation' in request.args:
+        parameterList.append(request.args['occupation'])
+        parameterList.append(request.args['location'])
+        parameterList.append(request.args['radius'])
+        parameterList.append(request.args['salary'])
+        
+        job_details = get_job_data(parameterList)
+        alljob_dict = {0:[job_details['titles'][0], job_details['locations'][0], job_details['salaries'][0], job_details['ids'][0]]}
+        title_arr = job_details['titles'][0]
+        return jsonify(alljob_dict)
+        
+        
+    else:
+        print("Could not find it")
+        return "Something went wrong"
+        
+    #print("Params received")
+    
+   
     
 
 
 
 """EXAMPLE FUNCTION TO BE USED TO RETREIVE DATA FROM DATABASE"""    
-def add_users():
-    """this was taken out of leaderboardsocket listener and made its own function"""
+"""def add_users():
     player = models.Person.query.filter_by(id=123321).first()
     if player is None:
         print("could not find id number")
@@ -85,7 +100,7 @@ def add_users():
 #     print("user has logged in")
     
     
-add_users() 
+add_users() """
 
     
     
