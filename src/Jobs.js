@@ -10,9 +10,11 @@ import PropTypes from 'prop-types';
 export function Jobs(props){
     const { details } = props;
     const {job_number} = props;
-    const test = props.details;
-    const BASE_URL = "/api/v1/job"
-    const [job_info, set_job_info] = useState([details[0]]);
+    const test = props.details[0];
+    const BASE_URL = "/api/v1/job";
+    const [job_info, set_job_info] = useState({details});
+    const [empty, set_empty] = useState(false);
+    
     
     
     
@@ -23,7 +25,7 @@ export function Jobs(props){
         console.log(job_number);
         console.log("Added to the favourtie");
         
-        const url = BASE_URL + "/Favorites" + "?favorite=" + details;
+        const url = BASE_URL + "/Favorites" + "?favorite=" + details[job_number];
       fetch(url, {
         method: 'GET',
         headers: {
@@ -40,15 +42,24 @@ export function Jobs(props){
     }
     
     useEffect(() => {
-    set_job_info(details[0]);
-  }, []);
-    
+  set_job_info(details[job_number]);
+  set_empty(true);
+  }, [details]);
+  
+  if(empty){  
   return (
     <div className="single_entry">
-      { job_info.map((item, index) => <ListItem key={index} name={item} />)}
+     <pre>
+      Title: 
+      {job_info}
+     </pre>
       <button type="button" className="button" onClick={Favourits}> Add To Favorites </button>
     </div>
   );
+    
+  }
+    return <div><p>Loading...</p></div>;
+  
     
     
     
