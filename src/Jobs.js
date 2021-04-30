@@ -12,7 +12,8 @@ export function Jobs(props){
     const {job_number} = props;
     const test = props.details[0];
     const BASE_URL = "/api/v1/job";
-    const [job_info, set_job_info] = useState({details});
+    const [job_info, set_job_info] = useState({});
+    const [title, set_title] = useState([]);
     const [empty, set_empty] = useState(false);
     
     
@@ -42,18 +43,34 @@ export function Jobs(props){
     }
     
     useEffect(() => {
-  set_job_info(details[job_number]);
+  set_job_info(details);
+  let title_name ;
+  title_name= details[job_number];
+  set_title(title_name);
   set_empty(true);
   }, [details]);
   
-  if(empty){  
+  if(!!title){  
   return (
     <div className="single_entry">
+      <center>
      <pre>
+     <p>
       Title: 
-      {job_info}
+      {title[0]}
+      </p>
+      <p>
+      Location: 
+      {title[1]}
+      </p>
+      <p>
+      Salary: 
+      {title[2]}
+      </p>
      </pre>
+     
       <button type="button" className="button" onClick={Favourits}> Add To Favorites </button>
+      </center>
     </div>
   );
     
