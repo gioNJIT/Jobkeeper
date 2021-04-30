@@ -1,11 +1,12 @@
 import React, { Fragment } from "react";
-import './App.css';
+import './style.css';
 import Login from './Login';
 import Logout from './Logout';
 import { ListItem } from './ListItem';
 import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
-import fetch from 'isomorphic-fetch';
+import { Jobs } from './Jobs';
+//import fetch from 'isomorphic-fetch';
 const BASE_URL = "/api/v1/job"
 
 
@@ -67,12 +68,13 @@ function App() {
 const Home = () => {
 
     const [occupation, setoccupation] = useState(); //these are the react states that hold the form information
-    const [job_details,set_job_details] = useState([]);
+    const [job_details,set_job_details] = useState({});
     const [location, setlocation] = useState();
     const [radius, setradius] = useState();
     const [salary, setsalary] = useState();
     const [ourform, setform] = useState([]);
-    const [submitting, setSubmitting] = useState(false); //this is the bool that gets used after the user clicks submit. it sends a message to user.
+    const [submitting, setSubmitting] = useState(false);//this is the bool that gets used after the user clicks submit. it sends a message to user.
+    const [is_shown, set_is_shown] = useState(false);
     const isLogedIn = true;
     const handleSubmit = event => { //This function is called when the submit button is pressed. It creates a List from the form information and stores it in "ourform"
       event.preventDefault();
@@ -83,7 +85,7 @@ const Home = () => {
       list.push(radius);
       list.push(salary);
       setform(list);
-      
+      set_is_shown(true);
       searchJob(occupation, location, radius, salary);
 
       
@@ -101,10 +103,26 @@ const Home = () => {
         },
       })
       .then(response => {
-        
+        return response.json();
       }).then(responseData => {
         console.log(responseData);
+        let temp = [];
+        temp = responseData;
+        set_job_details(temp);
       });
+    }
+    let list;
+    if (is_shown){
+      list = <div className="jobs_list">
+           <Jobs  details={job_details} job_number="0"/>
+           <Jobs  details={job_details} job_number="1"/>
+           <Jobs  details={job_details} job_number="2"/>
+           <Jobs  details={job_details} job_number="3"/>
+           <Jobs  details={job_details} job_number="4"/>
+           </div>;
+    }
+    else{
+      list = <div><p>Please Fill out the search form...</p></div>
     }
 
     return (
@@ -126,8 +144,7 @@ const Home = () => {
             <button type="submit">Submit</button>
           </form>
           <div>
-            <p> Hello there </p>
-           { job_details.map((item, index) => <ListItem key={index} name={item} />)}
+           {list}
           </div>
             
       </div>
