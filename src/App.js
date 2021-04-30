@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import './App.css';
+import './style.css';
 import Login from './Login';
 import Logout from './Logout';
 import { ListItem } from './ListItem';
@@ -68,7 +68,7 @@ function App() {
 const Home = () => {
 
     const [occupation, setoccupation] = useState(); //these are the react states that hold the form information
-    const [job_details,set_job_details] = useState([]);
+    const [job_details,set_job_details] = useState({});
     const [location, setlocation] = useState();
     const [radius, setradius] = useState();
     const [salary, setsalary] = useState();
@@ -105,8 +105,9 @@ const Home = () => {
         return response.json();
       }).then(responseData => {
         console.log(responseData);
-        
-        set_job_details(responseData[0]);
+        let temp = [];
+        temp = responseData;
+        set_job_details(temp);
       });
     }
 
@@ -129,9 +130,13 @@ const Home = () => {
             <button type="submit">Submit</button>
           </form>
           <div>
-           { job_details.map((item, index) => <ListItem key={index} name={item} />)}
-           <Jobs />
-           <p>Heyy there!!!</p>
+           <div className="jobs_list">
+           <Jobs  details={job_details} job_number="0"/>
+           <Jobs  details={job_details} job_number="1"/>
+           <Jobs  details={job_details} job_number="2"/>
+           <Jobs  details={job_details} job_number="3"/>
+           <Jobs  details={job_details} job_number="4"/>
+           </div>
           </div>
             
       </div>

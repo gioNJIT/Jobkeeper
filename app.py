@@ -65,8 +65,19 @@ def searchJob():
         parameterList.append(request.args['salary'])
         
         job_details = get_job_data(parameterList)
-        alljob_dict = {0:[job_details['titles'][0], job_details['locations'][0], job_details['salaries'][0], job_details['ids'][0]]}
+        print(job_details)
+        alljob_dict = {}
+        if(job_details['total_jobs'] <= 5):
+            total = job_details['total_jobs']
+        else:
+            total = 5
+            
+        
+        for job in range(0, total):
+            alljob_dict.update({job: [job_details['titles'][job], job_details['locations'][job], job_details['salaries'][job], job_details['ids'][job]]})
+        #alljob_dict = {0:[job_details['titles'][0], job_details['locations'][0], job_details['salaries'][0], job_details['ids'][0]]}
         title_arr = job_details['titles'][0]
+        print(alljob_dict)
         return jsonify(alljob_dict)
         
         
@@ -76,8 +87,11 @@ def searchJob():
         
     #print("Params received")
     
-   
-    
+@app.route('/api/v1/job/Favorites', methods=['GET'])
+def add_favourites():
+    data = request.args['favorite'].split(',')
+    print(data[0])
+    return "Something went wrong"
 
 
 
