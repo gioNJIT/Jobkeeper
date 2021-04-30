@@ -73,7 +73,8 @@ const Home = () => {
     const [radius, setradius] = useState();
     const [salary, setsalary] = useState();
     const [ourform, setform] = useState([]);
-    const [submitting, setSubmitting] = useState(false); //this is the bool that gets used after the user clicks submit. it sends a message to user.
+    const [submitting, setSubmitting] = useState(false);//this is the bool that gets used after the user clicks submit. it sends a message to user.
+    const [is_shown, set_is_shown] = useState(false);
     const isLogedIn = true;
     const handleSubmit = event => { //This function is called when the submit button is pressed. It creates a List from the form information and stores it in "ourform"
       event.preventDefault();
@@ -84,7 +85,7 @@ const Home = () => {
       list.push(radius);
       list.push(salary);
       setform(list);
-      
+      set_is_shown(true);
       searchJob(occupation, location, radius, salary);
 
       
@@ -110,6 +111,19 @@ const Home = () => {
         set_job_details(temp);
       });
     }
+    let list;
+    if (is_shown){
+      list = <div className="jobs_list">
+           <Jobs  details={job_details} job_number="0"/>
+           <Jobs  details={job_details} job_number="1"/>
+           <Jobs  details={job_details} job_number="2"/>
+           <Jobs  details={job_details} job_number="3"/>
+           <Jobs  details={job_details} job_number="4"/>
+           </div>;
+    }
+    else{
+      list = <div><p>Please Fill out the search form...</p></div>
+    }
 
     return (
       <Fragment>
@@ -130,13 +144,7 @@ const Home = () => {
             <button type="submit">Submit</button>
           </form>
           <div>
-           <div className="jobs_list">
-           <Jobs  details={job_details} job_number="0"/>
-           <Jobs  details={job_details} job_number="1"/>
-           <Jobs  details={job_details} job_number="2"/>
-           <Jobs  details={job_details} job_number="3"/>
-           <Jobs  details={job_details} job_number="4"/>
-           </div>
+           {list}
           </div>
             
       </div>

@@ -75,7 +75,7 @@ export function Jobs(props){
   );
     
   }
-    return <div><p>Loading...</p></div>;
+    return null;
   
     
     
