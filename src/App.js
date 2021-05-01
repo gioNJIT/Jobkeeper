@@ -30,11 +30,11 @@ function App() {
     <Router>  
         <div>
         <nav>
-            <Link to="/Home">Home</Link>|
-            <Link to={`/about/${jobDataTest}`}>About</Link>|
-            <Link to="/Login">Login</Link>|
-            <Link to="/Favorites">Favorites</Link>|
-            <Link to="/Logout">Logout</Link>
+            <Link class="dark-matter" to="/Home">Home</Link>|
+            <Link class="dark-matter" to={`/about/${jobDataTest}`}>About</Link>|
+            <Link class="dark-matter" to="/Login">Login</Link>|
+            <Link class="dark-matter" to="/Favorites">Favorites</Link>|
+            <Link class="dark-matter" to="/Logout">Logout</Link>
         </nav>
         <Switch>
             <Route path="/Login"  component={Login} />

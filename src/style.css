@@ -35,7 +35,21 @@
 	max-width: 500px;
 	background: #555;
 	padding: 20px 30px 20px 30px;
-	font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color: #D3D3D3;
+	text-shadow: 1px 1px 1px #444;
+	border: none;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+}
+
+
+.dark-matter-search {
+	margin-left: auto;
+	margin-right: auto;
+	background: #555;
+	padding: 20px 30px 20px 30px;
+	font-family: "Avenir Next" !important;
 	color: #D3D3D3;
 	text-shadow: 1px 1px 1px #444;
 	border: none;
