@@ -28,7 +28,7 @@ db = SQLAlchemy(app)
 
 # IMPORTANT: This must be AFTER creating db variable to prevent
 # circular import issues
-#import models  # pylint: disable=wrong-import-position
+import models  # pylint: disable=wrong-import-position
 
 
 
@@ -89,6 +89,35 @@ def searchJob():
         return "Something went wrong"
         
     #print("Params received")
+
+
+@app.route('/api/v1/job/getfavJob', methods=['GET'])
+def getfavJob():
+    favjobDict={}
+    if 'id' in request.args:
+        player = models.Person.query.filter_by(id=request.args["id"]).first()
+        
+        print("received id:")
+        print(id)
+        print("favorites list from id:")
+        print(player.favorites)
+        
+        for x in range(len(player.favorites)):
+            
+            jobquery= models.Jobs.query.filter_by(job_id=player.favorites[x]).first()
+            favjobDict[x]=[jobquery.job_id,jobquery.job_title,jobquery.job_location,jobquery.job_salary]
+            print(favjobDict[x])
+        
+        
+        return jsonify(favjobDict)
+        
+        
+    else:
+        print("Could not find it")
+        return "Something went wrong"
+
+
+
     
 @app.route('/api/v1/job/Favorites', methods=['GET'])
 def add_favourites():

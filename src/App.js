@@ -31,7 +31,7 @@ function App() {
         <div>
         <nav>
             <Link class="button" to="/Home">Home</Link>|
-            <Link class="button" to={`/about/${jobDataTest}`}>About</Link>|
+            <Link class="button" to={`/Applied/${jobDataTest}`}>Applied</Link>|
             <Link class="button" to="/Login">Login</Link>|
             <Link class="button" to="/Favorites">Favorites</Link>|
             <Link class="button" to="/Logout">Logout</Link>
@@ -43,10 +43,10 @@ function App() {
             <>
             <Redirect to="/Home" />
             <Route path="/Home" component={Home} />
-            <Route path="/about/:jobDataTest"  component={About} />
+            <Route path="/Applied/:jobDataTest"  component={Applied} />
             <Route path="/Favorites"  component={Favorites} />
             <Route path="/Logout"  component={Logout} />
-            <Route path="/about/:jobDataTest"  component={About} />
+            <Route path="/Applied/:jobDataTest"  component={Applied} />
             <Route path="/Favorites"  component={Favorites} />
 
             </> : <Redirect to="/Login" />
@@ -155,8 +155,8 @@ const Home = () => {
 };
 
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@TESTING PAGE COMPONENT. DELETE WHILE FINALIZING
-const About = () => {
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@APPLIED PAGE
+const Applied = () => {
   const { jobDataTest } = useParams()
   return (
   <Fragment>
@@ -168,12 +168,36 @@ const About = () => {
 };
 
 
-const Favorites = () => (
+const Favorites = () => {
+  let temp = {};
+  function getfavJob(id) {
+    const url = BASE_URL + "/getfavJob" + "?id=" + id;
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(response => {
+      return response.json();
+    }).then(responseData => {
+      console.log(responseData);
+      
+      temp = responseData;
+      
+    });
+  }
+  var id = 123321;
+  getfavJob(id);
+  
+  return (
+  
   <Fragment>
-    <h1>favorites has to pull directly from database</h1>
-    <h2>interaction with the other pages is not needed so sending components here is unneccesary</h2>
+    <h1>display "temp" dictionary here with favorites data </h1>
+
   </Fragment>
   );
+  };
 
 /*###leaving this here as a skeleton for another possible page
 const Contact = () => (
