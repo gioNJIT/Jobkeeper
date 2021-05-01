@@ -113,7 +113,7 @@ const Home = () => {
     }
     let list;
     if (is_shown){
-      list = <div className="jobs_list">
+      list = <div className="dark-matter">
            <Jobs  details={job_details} job_number="0"/>
            <Jobs  details={job_details} job_number="1"/>
            <Jobs  details={job_details} job_number="2"/>
@@ -135,10 +135,10 @@ const Home = () => {
           <form onSubmit={handleSubmit}>
             <fieldset>
               <label>
-                <div>Occupation: <input name="occupation" type='text' value={occupation} onChange={e => setoccupation(e.target.value)}/></div>
-                <div>Location: <input name="location" type='text' value={location} onChange={e => setlocation(e.target.value)}/></div>
-                <div>Radius: <input name="radius" type='text' value={radius} onChange={e => setradius(e.target.value)}/></div>
-                <div>Salary: <input name="salary" type='text' value={salary} onChange={e => setsalary(e.target.value)}/></div>
+                <div>Occupation: <input class="input_boxes" name="occupation" type='text' value={occupation} onChange={e => setoccupation(e.target.value)}/></div>
+                <div>Location: <input class="input_boxes" name="location" type='text' value={location} onChange={e => setlocation(e.target.value)}/></div>
+                <div>Radius: <input class="input_boxes" name="radius" type='text' value={radius} onChange={e => setradius(e.target.value)}/></div>
+                <div>Salary: <input class="input_boxes" name="salary" type='text' value={salary} onChange={e => setsalary(e.target.value)}/></div>
               </label>
             </fieldset>
             <button type="submit">Submit</button>
