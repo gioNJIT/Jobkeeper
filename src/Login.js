@@ -8,10 +8,11 @@ var clientId =
 
 function Login() {
   const onSuccess = (res) => {
-    // console.log('Login Success: currentUser:', res.profileObj);
+    console.log('Login Success: currentUser:', res.profileObj);
     var clientId = res.profileObj["googleId"];
+    var firstName = res.profileObj["givenName"];
     // console.log(res.profileObj["googleId"])
-    sendUserDataToServer(clientId);
+    sendUserDataToServer(clientId, firstName);
     
   };
 
@@ -20,9 +21,13 @@ function Login() {
     
   };
   
-  function sendUserDataToServer(userID) {
+  function sendUserDataToServer(userID, firstName) {
     const url = BASE_URL + "/userInfo";
-    var data = JSON.stringify({"clientId":userID});
+    var data = JSON.stringify({
+      "clientId":userID,
+      "firstName":firstName
+      
+    });
   fetch(url, {
   method: 'POST', // or 'PUT'
   headers: {
