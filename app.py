@@ -52,7 +52,10 @@ def index(filename):
     '''
     return send_from_directory('./build', filename)
 
-    
+@app.route('/api/v1/job/userInfo', methods=['POST'])
+def userInfo():
+    print(request.get_json())
+    return "Test"
     
     
 @app.route('/api/v1/job/searchJob', methods=['GET'])
