@@ -30,11 +30,11 @@ function App() {
     <Router>  
         <div>
         <nav>
-            <Link class="dark-matter" to="/Home">Home</Link>|
-            <Link class="dark-matter" to={`/about/${jobDataTest}`}>About</Link>|
-            <Link class="dark-matter" to="/Login">Login</Link>|
-            <Link class="dark-matter" to="/Favorites">Favorites</Link>|
-            <Link class="dark-matter" to="/Logout">Logout</Link>
+            <Link class="button" to="/Home">Home</Link>|
+            <Link class="button" to={`/about/${jobDataTest}`}>About</Link>|
+            <Link class="button" to="/Login">Login</Link>|
+            <Link class="button" to="/Favorites">Favorites</Link>|
+            <Link class="button" to="/Logout">Logout</Link>
         </nav>
         <Switch>
             <Route path="/Login"  component={Login} />
@@ -141,7 +141,7 @@ const Home = () => {
                 <div>Salary: <input class="input_boxes" name="salary" type='text' value={salary} onChange={e => setsalary(e.target.value)}/></div>
               </label>
             </fieldset>
-            <button type="submit">Submit</button>
+            <button class="button" type="submit">Submit</button>
           </form>
           <div>
            {list}
