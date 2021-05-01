@@ -1,0 +1,79 @@
+
+
+.jobs_list{
+    display: grid;
+    grid-template-rows: auto;
+    gap: 30px;
+    /* background-color: rgba(0, 0, 255); */
+    border-radius: 10px;
+    padding: 10px;
+    
+}
+
+.single_entry{
+   background-color:rgb(128,128,128);
+   border-radius: 10px;
+}
+
+.button{
+  background-color: #5C5A5A;
+  color: #ffffff;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+
+.input_boxes{
+    display: grid;
+    grid-template-rows: auto;
+    /* background-color: rgba(0, 0, 255); */
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.dark-matter {
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 500px;
+	background: #555;
+	padding: 20px 30px 20px 30px;
+	color: #D3D3D3;
+	text-shadow: 1px 1px 1px #444;
+	border: none;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	font-size: 24px;
+}
+
+
+.dark-matter-search {
+	margin-left: auto;
+	margin-right: auto;
+	background: #555;
+	padding: 20px 30px 20px 30px;
+	font-family: "Avenir Next" !important;
+	color: #D3D3D3;
+	text-shadow: 1px 1px 1px #444;
+	border: none;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+}
+
+h1 {
+	color:#5C5A5A;
+}
+
+label{
+	color:#5C5A5A;
+	font-size: 24px;
+}

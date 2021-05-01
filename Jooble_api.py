@@ -28,7 +28,7 @@ def get_job_data(paramList):
     
     response = requests.post(BASE_URL, json=params)  #Making a call to the Joooble API using POST request
     data = response.json() # Converting the response into the json
-    print(data)
+    #print(data)
     total_result = data['totalCount']
     all_jobs = data['jobs']
     
