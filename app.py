@@ -28,7 +28,7 @@ db = SQLAlchemy(app)
 
 # IMPORTANT: This must be AFTER creating db variable to prevent
 # circular import issues
-#import models  # pylint: disable=wrong-import-position
+import models  # pylint: disable=wrong-import-position
 
 
 
@@ -95,8 +95,8 @@ def add_favourites():
 
 
 
-"""EXAMPLE FUNCTION TO BE USED TO RETREIVE DATA FROM DATABASE"""    
-"""def add_users():
+"EXAMPLE FUNCTION TO BE USED TO RETREIVE DATA FROM DATABASE"    
+def add_users():
     player = models.Person.query.filter_by(id=123321).first()
     if player is None:
         print("could not find id number")
@@ -114,7 +114,7 @@ def add_favourites():
 #     print("user has logged in")
     
     
-add_users() """
+add_users()
 
     
     
