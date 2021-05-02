@@ -30,11 +30,11 @@ function App() {
     <Router>  
         <div>
         <nav>
-            <Link to="/Home">Home</Link>|
-            <Link to={`/about/${jobDataTest}`}>About</Link>|
-            <Link to="/Login">Login</Link>|
-            <Link to="/Favorites">Favorites</Link>|
-            <Link to="/Logout">Logout</Link>
+            <Link class="button" to="/Home">Home</Link>|
+            <Link class="button" to={`/Applied/${jobDataTest}`}>Applied</Link>|
+            <Link class="button" to="/Login">Login</Link>|
+            <Link class="button" to="/Favorites">Favorites</Link>|
+            <Link class="button" to="/Logout">Logout</Link>
         </nav>
         <Switch>
             <Route path="/Login"  component={Login} />
@@ -43,10 +43,10 @@ function App() {
             <>
             <Redirect to="/Home" />
             <Route path="/Home" component={Home} />
-            <Route path="/about/:jobDataTest"  component={About} />
+            <Route path="/Applied/:jobDataTest"  component={Applied} />
             <Route path="/Favorites"  component={Favorites} />
             <Route path="/Logout"  component={Logout} />
-            <Route path="/about/:jobDataTest"  component={About} />
+            <Route path="/Applied/:jobDataTest"  component={Applied} />
             <Route path="/Favorites"  component={Favorites} />
 
             </> : <Redirect to="/Login" />
@@ -113,7 +113,7 @@ const Home = () => {
     }
     let list;
     if (is_shown){
-      list = <div className="jobs_list">
+      list = <div className="dark-matter">
            <Jobs  details={job_details} job_number="0"/>
            <Jobs  details={job_details} job_number="1"/>
            <Jobs  details={job_details} job_number="2"/>
@@ -135,13 +135,13 @@ const Home = () => {
           <form onSubmit={handleSubmit}>
             <fieldset>
               <label>
-                <div>Occupation: <input name="occupation" type='text' value={occupation} onChange={e => setoccupation(e.target.value)}/></div>
-                <div>Location: <input name="location" type='text' value={location} onChange={e => setlocation(e.target.value)}/></div>
-                <div>Radius: <input name="radius" type='text' value={radius} onChange={e => setradius(e.target.value)}/></div>
-                <div>Salary: <input name="salary" type='text' value={salary} onChange={e => setsalary(e.target.value)}/></div>
+                <div>Occupation: <input class="input_boxes" name="occupation" type='text' value={occupation} onChange={e => setoccupation(e.target.value)}/></div>
+                <div>Location: <input class="input_boxes" name="location" type='text' value={location} onChange={e => setlocation(e.target.value)}/></div>
+                <div>Radius: <input class="input_boxes" name="radius" type='text' value={radius} onChange={e => setradius(e.target.value)}/></div>
+                <div>Salary: <input class="input_boxes" name="salary" type='text' value={salary} onChange={e => setsalary(e.target.value)}/></div>
               </label>
             </fieldset>
-            <button type="submit">Submit</button>
+            <button class="button" type="submit">Submit</button>
           </form>
           <div>
            {list}
@@ -155,8 +155,8 @@ const Home = () => {
 };
 
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@TESTING PAGE COMPONENT. DELETE WHILE FINALIZING
-const About = () => {
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@APPLIED PAGE
+const Applied = () => {
   const { jobDataTest } = useParams()
   return (
   <Fragment>
@@ -168,12 +168,36 @@ const About = () => {
 };
 
 
-const Favorites = () => (
+const Favorites = () => {
+  let temp = {};
+  function getfavJob(id) {
+    const url = BASE_URL + "/getfavJob" + "?id=" + id;
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(response => {
+      return response.json();
+    }).then(responseData => {
+      console.log(responseData);
+      
+      temp = responseData;
+      
+    });
+  }
+  var id = 123321;
+  getfavJob(id);
+  
+  return (
+  
   <Fragment>
-    <h1>favorites has to pull directly from database</h1>
-    <h2>interaction with the other pages is not needed so sending components here is unneccesary</h2>
+    <h1>display "temp" dictionary here with favorites data </h1>
+
   </Fragment>
   );
+  };
 
 /*###leaving this here as a skeleton for another possible page
 const Contact = () => (
