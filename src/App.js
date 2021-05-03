@@ -1,32 +1,63 @@
 import React, { Fragment } from "react";
-import './App.css';
-import io from "socket.io-client";
+import './style.css';
 import Login from './Login';
+import Logout from './Logout';
 import { ListItem } from './ListItem';
 import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
-
-export const socket = io();
-
+import { Jobs } from './Jobs';
+import { GoogleLogin } from 'react-google-login';
+//import fetch from 'isomorphic-fetch';
+const BASE_URL = "/api/v1/job"
+var clientId = 
+process.env.REACT_APP_GOOGLE_API_KEY;
 
 
 function App() {
+  
+
+ 
+
+function Login() {
+  const onSuccess = (res) => {
+    console.log('Login Success: currentUser:', res.profileObj);
+    setIsAuthenticated(true);
+    clientId = res.profileObj["googleId"]
+    
+  };
+
+  const onFailure = (res) => {
+    console.log('Login failed: res:', res);
+    setIsAuthenticated(false);
+    
+  };
+ 
+ 
+
+  return (
+    <div>
+      <GoogleLogin
+        clientId={clientId}
+        buttonText="Login"
+        onSuccess={onSuccess}
+        onFailure={onFailure}
+        setIsAuthenticated={onSuccess}
+        //cookiePolicy={'single_host_origin'}
+        style={{ marginTop: '100px' }}
+        isSignedIn={true}
+      />
+    </div>
+  );
+}
 
    
     const jobDataTest = "this is a job posting"; //this is mocking the job posting data that will be passed to the components
     const [isAuthenticated, setIsAuthenticated] = useState(false); //thi is mocking the login authentication. change to false to test
     
+    
   
-    useEffect(() => {
-    socket.on("UserLoggedIn", (fromServer) => {
-      setIsAuthenticated(true);
-      
-      
-      
-      
-    });
+  
 
-  }, [isAuthenticated]);
   
   
   console.log(isAuthenticated);
@@ -35,10 +66,11 @@ function App() {
     <Router>  
         <div>
         <nav>
-            <Link to="/Home">Home</Link>|
-            <Link to={`/about/${jobDataTest}`}>About</Link>|
-            <Link to="/Login">Login</Link>|
-            <Link to="/Favorites">Favorites</Link>
+            <Link class="button" to="/Home">Home</Link>|
+            <Link class="button" to={`/Applied/${jobDataTest}`}>Applied</Link>|
+            <Link class="button" to="/Login">Login</Link>|
+            <Link class="button" to="/Favorites">Favorites</Link>|
+            <Link class="button" to="/Logout">Logout</Link>
         </nav>
         <Switch>
             <Route path="/Login"  component={Login} />
@@ -47,8 +79,12 @@ function App() {
             <>
             <Redirect to="/Home" />
             <Route path="/Home" component={Home} />
-            <Route path="/about/:jobDataTest"  component={About} />
+            <Route path="/Applied/:jobDataTest"  component={Applied} />
             <Route path="/Favorites"  component={Favorites} />
+            <Route path="/Logout"  component={Logout} />
+            <Route path="/Applied/:jobDataTest"  component={Applied} />
+            <Route path="/Favorites"  component={Favorites} />
+
             </> : <Redirect to="/Login" />
             }
       
@@ -68,13 +104,14 @@ function App() {
 const Home = () => {
 
     const [occupation, setoccupation] = useState(); //these are the react states that hold the form information
-    const [job_details,set_job_details] = useState([]);
+    const [job_details,set_job_details] = useState({});
     const [location, setlocation] = useState();
     const [radius, setradius] = useState();
     const [salary, setsalary] = useState();
     const [ourform, setform] = useState([]);
-    const [submitting, setSubmitting] = useState(false); //this is the bool that gets used after the user clicks submit. it sends a message to user.
-    const isLogedIn = false;
+    const [submitting, setSubmitting] = useState(false);//this is the bool that gets used after the user clicks submit. it sends a message to user.
+    const [is_shown, set_is_shown] = useState(false);
+    const isLogedIn = true;
     const handleSubmit = event => { //This function is called when the submit button is pressed. It creates a List from the form information and stores it in "ourform"
       event.preventDefault();
       setSubmitting(true);
@@ -84,27 +121,45 @@ const Home = () => {
       list.push(radius);
       list.push(salary);
       setform(list);
-      
-      socket.emit("sendParams", {userParams: list});
+      set_is_shown(true);
+      searchJob(occupation, location, radius, salary);
+      // console.log(Login.clientId)
       
       setTimeout(() => {
         setSubmitting(false);
       }, 3000);
     };
     
-     useEffect(() => {
-       
-       
-    socket.on("Updated_details", (data) => {
-      console.log("It is runnig!!!!");
-      set_job_details(data);
-      
-      
-      
-      
-    });
-
-  }, []);
+  function searchJob(occupation, location, radius, salary) {
+      const url = BASE_URL + "/searchJob" + "?occupation=" + occupation + "&location=" + location + "&radius=" + radius + "&salary=" + salary;
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+      .then(response => {
+        return response.json();
+      }).then(responseData => {
+        console.log(responseData);
+        let temp = [];
+        temp = responseData;
+        set_job_details(temp);
+      });
+    }
+    let list;
+    if (is_shown){
+      list = <div className="dark-matter">
+           <Jobs  details={job_details} job_number="0"/>
+           <Jobs  details={job_details} job_number="1"/>
+           <Jobs  details={job_details} job_number="2"/>
+           <Jobs  details={job_details} job_number="3"/>
+           <Jobs  details={job_details} job_number="4"/>
+           </div>;
+    }
+    else{
+      list = <div><p>Please Fill out the search form...</p></div>
+    }
 
     return (
       <Fragment>
@@ -116,17 +171,16 @@ const Home = () => {
           <form onSubmit={handleSubmit}>
             <fieldset>
               <label>
-                <div>Occupation: <input name="occupation" type='text' value={occupation} onChange={e => setoccupation(e.target.value)}/></div>
-                <div>Location: <input name="location" type='text' value={location} onChange={e => setlocation(e.target.value)}/></div>
-                <div>Radius: <input name="radius" type='text' value={radius} onChange={e => setradius(e.target.value)}/></div>
-                <div>Salary: <input name="salary" type='text' value={salary} onChange={e => setsalary(e.target.value)}/></div>
+                <div>Occupation: <input class="input_boxes" name="occupation" type='text' value={occupation} onChange={e => setoccupation(e.target.value)}/></div>
+                <div>Location: <input class="input_boxes" name="location" type='text' value={location} onChange={e => setlocation(e.target.value)}/></div>
+                <div>Radius: <input class="input_boxes" name="radius" type='text' value={radius} onChange={e => setradius(e.target.value)}/></div>
+                <div>Salary: <input class="input_boxes" name="salary" type='text' value={salary} onChange={e => setsalary(e.target.value)}/></div>
               </label>
             </fieldset>
-            <button type="submit">Submit</button>
+            <button class="button" type="submit">Submit</button>
           </form>
           <div>
-            <p> Hello there </p>
-           { job_details.map((item, index) => <ListItem key={index} name={item} />)}
+           {list}
           </div>
             
       </div>
@@ -137,8 +191,8 @@ const Home = () => {
 };
 
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@TESTING PAGE COMPONENT. DELETE WHILE FINALIZING
-const About = () => {
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@APPLIED PAGE
+const Applied = () => {
   const { jobDataTest } = useParams()
   return (
   <Fragment>
@@ -150,12 +204,36 @@ const About = () => {
 };
 
 
-const Favorites = () => (
+const Favorites = () => {
+  let temp = {};
+  function getfavJob(id) {
+    const url = BASE_URL + "/getfavJob" + "?id=" + id;
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(response => {
+      return response.json();
+    }).then(responseData => {
+      console.log(responseData);
+      
+      temp = responseData;
+      
+    });
+  }
+  var id = 123321;
+  getfavJob(id);
+  
+  return (
+  
   <Fragment>
-    <h1>favorites has to pull directly from database</h1>
-    <h2>interaction with the other pages is not needed so sending components here is unneccesary</h2>
+    <h1>display "temp" dictionary here with favorites data </h1>
+
   </Fragment>
   );
+  };
 
 /*###leaving this here as a skeleton for another possible page
 const Contact = () => (

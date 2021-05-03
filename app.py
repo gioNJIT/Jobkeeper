@@ -2,18 +2,39 @@ import functools
 import json
 import os
 from dotenv import load_dotenv,find_dotenv
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, request, jsonify, Response
 import requests
 from Jooble_api import get_job_data
-from flask_socketio import SocketIO
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+
+
+app = Flask(__name__, static_folder='./build/static')
+
 
 load_dotenv(find_dotenv())
 
 api_key = os.getenv('api_key')
-BASE_URL = 'https://jooble.org/api/' + api_key
+BASE_URL = 'https://jooble.org/api/' + str(api_key)
 
-parameterList = []
+
+
+# Point SQLAlchemy to your Heroku database
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+# Gets rid of a warning
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+# IMPORTANT: This must be AFTER creating db variable to prevent
+# circular import issues
+import models  # pylint: disable=wrong-import-position
+
+
+
+
+
+
 
 
 app = Flask(__name__, static_folder='./build/static')
@@ -21,10 +42,6 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
-socketio = SocketIO(app,
-                    cors_allowed_origins="*",
-                    json=json,
-                    manage_session=False)
 
 
 @app.route('/', defaults={"filename": "index.html"})
@@ -35,40 +52,118 @@ def index(filename):
     '''
     return send_from_directory('./build', filename)
 
+@app.route('/api/v1/job/userInfo', methods=['POST'])
+def userInfo():
+    print(request.get_json())
+    return "Test"
     
     
-    
-@socketio.on('UserLoggedIn')
-def on_UserLoggedIn():
-    socketio.emit('UserLoggedIn', broadcast=True, include_self=True)
-    print("user has logged in")
-    
-    
-    
-@socketio.on('connect')
-def on_connected():
-    """
-    handle when user connects to server
-    """
-    print('User connected!')   
-    
-    
-    
-@socketio.on('sendParams')
-def receiveParams(data):
-    parameterList = data["userParams"]
-    job_details = get_job_data(parameterList)
-    title_arr = job_details['titles']
-    socketio.emit( "Updated_details",title_arr, broadcast=True, include_self=True)
-    print(job_details['titles'])
-    
-    
-    
-    
-if __name__ == "__main__":  
-    socketio.run(
-        app,
-        host=os.getenv('IP', '0.0.0.0'),
-        port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
-    )
+@app.route('/api/v1/job/searchJob', methods=['GET'])
+def searchJob():
+    parameterList = []
+    if 'occupation' in request.args:
+        parameterList.append(request.args['occupation'])
+        parameterList.append(request.args['location'])
+        parameterList.append(request.args['radius'])
+        parameterList.append(request.args['salary'])
+        
+        job_details = get_job_data(parameterList)
+        print(job_details)
+        alljob_dict = {}
+        if(job_details['total_jobs'] <= 5):
+            total = job_details['total_jobs']
+        else:
+            total = 5
+            
+        
+        for job in range(0, total):
+            alljob_dict.update({job: [job_details['titles'][job], job_details['locations'][job], job_details['salaries'][job], job_details['ids'][job]]})
+        #alljob_dict = {0:[job_details['titles'][0], job_details['locations'][0], job_details['salaries'][0], job_details['ids'][0]]}
+        title_arr = job_details['titles'][0]
+        print(alljob_dict)
+        return jsonify(alljob_dict)
+        
+        
+    else:
+        print("Could not find it")
+        return "Something went wrong"
+        
+    #print("Params received")
 
+
+@app.route('/api/v1/job/getfavJob', methods=['GET'])
+def getfavJob():
+    favjobDict={}
+    if 'id' in request.args:
+        player = models.Person.query.filter_by(id=request.args["id"]).first()
+        
+        print("received id:")
+        print(id)
+        print("favorites list from id:")
+        print(player.favorites)
+        
+        for x in range(len(player.favorites)):
+            
+            jobquery= models.Jobs.query.filter_by(job_id=player.favorites[x]).first()
+            favjobDict[x]=[jobquery.job_id,jobquery.job_title,jobquery.job_location,jobquery.job_salary]
+            print(favjobDict[x])
+        
+        
+        return jsonify(favjobDict)
+        
+        
+    else:
+        print("Could not find it")
+        return "Something went wrong"
+
+
+
+    
+@app.route('/api/v1/job/Favorites', methods=['GET'])
+def add_favourites():
+    data = request.args['favorite'].split(',')
+    print(data[0])
+    return "Something went wrong"
+
+
+
+"""EXAMPLE FUNCTION TO BE USED TO RETREIVE DATA FROM DATABASE"""    
+"""def add_users():
+    player = models.Person.query.filter_by(id=123321).first()
+    if player is None:
+        print("could not find id number")
+        #addplayer = models.Person(username=data['user'], score=100)
+        #DB.session.add(addplayer)  # pylint: disable=no-member
+        #DB.session.commit()  # pylint: disable=no-member
+    else:
+        print("player")
+        print(player.id)
+    
+    
+# @socketio.on('UserLoggedIn')
+# def on_UserLoggedIn():
+#     socketio.emit('UserLoggedIn', broadcast=True, include_self=True)
+#     print("user has logged in")
+    
+    
+add_users() """
+
+    
+    
+    
+# @socketio.on('sendParams')
+# def receiveParams(data):
+#     parameterList = data["userParams"]
+#     job_details = get_job_data(parameterList)
+#     title_arr = job_details['titles']
+#     socketio.emit( "Updated_details",title_arr, broadcast=True, include_self=True)
+#     print(job_details['titles'])
+    
+    
+if __name__ == "__main__":    
+    app.run(
+        host=os.getenv('IP', '0.0.0.0'),
+        port=8081,
+        debug=True,
+        use_reloader=True
+        )
