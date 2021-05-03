@@ -9,19 +9,20 @@ import { Jobs } from './Jobs';
 import { GoogleLogin } from 'react-google-login';
 //import fetch from 'isomorphic-fetch';
 const BASE_URL = "/api/v1/job"
-
-
+var clientId = 
+process.env.REACT_APP_GOOGLE_API_KEY;
 
 
 function App() {
   
-  const clientId =
- process.env.REACT_APP_GOOGLE_API_KEY;
+
+ 
 
 function Login() {
   const onSuccess = (res) => {
     console.log('Login Success: currentUser:', res.profileObj);
     setIsAuthenticated(true);
+    clientId = res.profileObj["googleId"]
     
   };
 
@@ -122,7 +123,7 @@ const Home = () => {
       setform(list);
       set_is_shown(true);
       searchJob(occupation, location, radius, salary);
-
+      // console.log(Login.clientId)
       
       setTimeout(() => {
         setSubmitting(false);
