@@ -3,17 +3,17 @@ import React from 'react';
 import { GoogleLogin } from 'react-google-login';
 
 var BASE_URL = "/api/v1/job";
-var clientId =
+var clientId = 
  process.env.REACT_APP_GOOGLE_API_KEY;
 
 function Login() {
   const onSuccess = (res) => {
     console.log('Login Success: currentUser:', res.profileObj);
-    var clientId = res.profileObj["googleId"];
+    var googleId = res.profileObj["googleId"];
     var firstName = res.profileObj["givenName"];
     // console.log(res.profileObj["googleId"])
-    sendUserDataToServer(clientId, firstName);
-    
+    sendUserDataToServer(googleId, firstName);
+    clientId = googleId 
   };
 
   const onFailure = (res) => {
