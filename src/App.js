@@ -246,7 +246,7 @@ const Favorites = () => {
     .then(response => {
       return response.json();
     }).then(responseData => {
-      console.log(responseData);
+      //console.log(responseData);
       
       temp = responseData;
       
