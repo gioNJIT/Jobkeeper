@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import './style.css';
 import Login from './Login';
 import Logout from './Logout';
+
 import { ListItem } from './ListItem';
 import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
@@ -14,7 +15,32 @@ process.env.REACT_APP_GOOGLE_API_KEY;
 
 
 function App() {
-  
+ function sendUserDataToServer(userID, firstName) {
+    const url = BASE_URL + "/userInfo";
+    var data = JSON.stringify({
+      "clientId":userID,
+      "firstName":firstName
+      
+    });
+  fetch(url, {
+  method: 'POST', // or 'PUT'
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: data,
+})
+.then(response => {
+  console.log(response);
+  return response.json();
+})
+.then(data => {
+  console.log('Success:', data);
+})
+.catch((error) => {
+  console.error('Error:', error);
+});
+    
+  }
 
  
 
@@ -23,7 +49,10 @@ function Login() {
     console.log('Login Success: currentUser:', res.profileObj);
     setIsAuthenticated(true);
     clientId = res.profileObj["googleId"]
-    
+    var googleId = res.profileObj["googleId"];
+    var firstName = res.profileObj["givenName"];
+    // console.log(res.profileObj["googleId"])
+    sendUserDataToServer(googleId, firstName);
   };
 
   const onFailure = (res) => {
