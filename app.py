@@ -73,7 +73,7 @@ def search_job():
         else:
             total = 5
         for job in range(0, total):
-            alljob_dict.update({job: [job_details['titles'][job], job_details['locations'][job], job_details['salaries'][job], job_details['ids'][job]]})
+            alljob_dict.update({job: [job_details['titles'][job], job_details['locations'][job], job_details['salaries'][job], job_details['ids'][job]]})  # pylint: disable=C0301
         #title_arr = job_details['titles'][0]
         print(alljob_dict)
         return jsonify(alljob_dict)
@@ -92,7 +92,7 @@ def getfav_job():
         print(player.favorites)
         for fav in range(len(player.favorites)):
             jobquery = models.Jobs.query.filter_by(job_id=player.favorites[fav]).first()
-            favjob_dict[fav] = [jobquery.job_id, jobquery.job_title, jobquery.job_location, jobquery.job_salary]
+            favjob_dict[fav] = [jobquery.job_id, jobquery.job_title, jobquery.job_location, jobquery.job_salary]  # pylint: disable=C0301
             print(favjob_dict[fav])
         return jsonify(favjob_dict)
     return "Something went wrong"
@@ -104,26 +104,25 @@ def add_favourites():
     data = request.args['favorite'].split(',')
     #print(data[4])
     fav_job_id = data[4]
-    all_entry = models.Person.query.all()
+    #all_entry = models.Person.query.all()
     #print(all_entry)
     #all_fav = models.Person.query.filter_by(id=user_id).first()
-    all_fav = DB.session.query(  # pylint: disable=E1101 
-        models.Person).filter_by(id= '123321').first()
+    all_fav = DB.session.query(models.Person).filter_by(id='123321').first() # pylint: disable=E1101
     #print(all_fav.favorites)
     temp_list = all_fav.favorites
     client_id = all_fav.id
     temp_email = all_fav.email
     temp_applied = all_fav.applied
-    DB.session.delete(all_fav)
-    DB.session.commit()
-    temp_list.append(str(fav_job_id))
+    DB.session.delete(all_fav) # pylint: disable=E1101
+    DB.session.commit() # pylint: disable=E1101
+    temp_list.append(str(fav_job_id)) # pylint: disable=E1101
     print(temp_list)
     print(client_id)
     print(temp_email)
     print(temp_applied)
-    new_entry = models.Person(id=client_id, email=temp_email,favorites=temp_list,applied=temp_applied)    
-    DB.session.add(new_entry)
-    DB.session.commit()
+    new_entry = models.Person(id=client_id, email=temp_email, favorites=temp_list, applied=temp_applied) # pylint: disable=C0301
+    DB.session.add(new_entry) # pylint: disable=E1101
+    DB.session.commit() # pylint: disable=E1101
     return "Something went wrong"
 if __name__ == "__main__":
     APP.run(
