@@ -29,7 +29,7 @@ db = SQLAlchemy(app)
 # IMPORTANT: This must be AFTER creating db variable to prevent
 # circular import issues
 import models  # pylint: disable=wrong-import-position
-
+user_id = 123321
 
 
 
@@ -68,7 +68,7 @@ def searchJob():
         parameterList.append(request.args['salary'])
         
         job_details = get_job_data(parameterList)
-        print(job_details)
+        #print(job_details)
         alljob_dict = {}
         if(job_details['total_jobs'] <= 5):
             total = job_details['total_jobs']
@@ -77,10 +77,10 @@ def searchJob():
             
         
         for job in range(0, total):
-            alljob_dict.update({job: [job_details['titles'][job], job_details['locations'][job], job_details['salaries'][job], job_details['ids'][job]]})
+            alljob_dict.update({job: [job_details['titles'][job], job_details['locations'][job], job_details['salaries'][job], str(job_details['ids'][job])]})
         #alljob_dict = {0:[job_details['titles'][0], job_details['locations'][0], job_details['salaries'][0], job_details['ids'][0]]}
         title_arr = job_details['titles'][0]
-        print(alljob_dict)
+        #print(alljob_dict)
         return jsonify(alljob_dict)
         
         
@@ -121,14 +121,45 @@ def getfavJob():
     
 @app.route('/api/v1/job/Favorites', methods=['GET'])
 def add_favourites():
+    temp_list = []
     data = request.args['favorite'].split(',')
-    print(data[0])
+    #print(data[4])
+    fav_job_id = data[4]
+    all_entry = models.Person.query.all()
+    #print(all_entry)
+    
+    
+    #all_fav = models.Person.query.filter_by(id=user_id).first()
+    all_fav = db.session.query(  # pylint: disable=E1101 
+        models.Person).filter_by(id= '123321').first()
+    #print(all_fav.favorites)
+    temp_list = all_fav.favorites
+    client_id = all_fav.id
+    temp_email = all_fav.email
+    temp_applied = all_fav.applied
+    db.session.delete(all_fav)
+    db.session.commit()
+    
+    temp_list.append(str(fav_job_id))
+    print(temp_list)
+    print(client_id)
+    print(temp_email)
+    print(temp_applied)
+    
+    #if all_fav.favorites is None:
+    new_entry = models.Person(id=client_id, email=temp_email,favorites=temp_list,applied=temp_applied)    
+    db.session.add(new_entry)
+    db.session.commit()
+        
+    #print(all_fav.favorites)
+    
+    
     return "Something went wrong"
 
 
-
-"""EXAMPLE FUNCTION TO BE USED TO RETREIVE DATA FROM DATABASE"""    
-"""def add_users():
+"""
+"EXAMPLE FUNCTION TO BE USED TO RETREIVE DATA FROM DATABASE"    
+def add_users():
     player = models.Person.query.filter_by(id=123321).first()
     if player is None:
         print("could not find id number")
@@ -146,7 +177,7 @@ def add_favourites():
 #     print("user has logged in")
     
     
-add_users() """
+#add_users()"""
 
     
     
