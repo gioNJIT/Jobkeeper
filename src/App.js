@@ -193,7 +193,7 @@ const Home = () => {
     return (
       <Fragment>
         <div className="mainform">
-          <h1>Job search</h1>
+          <h1>JobFind</h1>
           {submitting &&
            <div>Searching jobs...</div>
           }
