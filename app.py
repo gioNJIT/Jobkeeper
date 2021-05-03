@@ -128,6 +128,7 @@ def add_favourites():
     all_entry = models.Person.query.all()
     #print(all_entry)
     
+    
     #all_fav = models.Person.query.filter_by(id=user_id).first()
     all_fav = db.session.query(  # pylint: disable=E1101 
         models.Person).filter_by(id= '123321').first()
