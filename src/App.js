@@ -6,6 +6,7 @@ import { ListItem } from './ListItem';
 import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
 import { Jobs } from './Jobs';
+import { GoogleLogin } from 'react-google-login';
 //import fetch from 'isomorphic-fetch';
 const BASE_URL = "/api/v1/job"
 
@@ -13,10 +14,44 @@ const BASE_URL = "/api/v1/job"
 
 
 function App() {
+  
+  const clientId =
+ process.env.REACT_APP_GOOGLE_API_KEY;
+
+function Login() {
+  const onSuccess = (res) => {
+    console.log('Login Success: currentUser:', res.profileObj);
+    setIsAuthenticated(true);
+    
+  };
+
+  const onFailure = (res) => {
+    console.log('Login failed: res:', res);
+    setIsAuthenticated(false);
+    
+  };
+ 
+ 
+
+  return (
+    <div>
+      <GoogleLogin
+        clientId={clientId}
+        buttonText="Login"
+        onSuccess={onSuccess}
+        onFailure={onFailure}
+        setIsAuthenticated={onSuccess}
+        //cookiePolicy={'single_host_origin'}
+        style={{ marginTop: '100px' }}
+        isSignedIn={true}
+      />
+    </div>
+  );
+}
 
    
     const jobDataTest = "this is a job posting"; //this is mocking the job posting data that will be passed to the components
-    const [isAuthenticated, setIsAuthenticated] = useState(true); //thi is mocking the login authentication. change to false to test
+    const [isAuthenticated, setIsAuthenticated] = useState(false); //thi is mocking the login authentication. change to false to test
     
     
   
