@@ -47,7 +47,6 @@ def index(filename):
     This is a index function
     '''
     return send_from_directory('./build', filename)
-
 @APP.route('/api/v1/job/userInfo', methods=['POST'])
 def user_info():
     '''
@@ -74,7 +73,7 @@ def search_job():
         else:
             total = 5
         for job in range(0, total):
-            alljob_dict.update({job:[job_details['titles'][job], job_details['locations'][job], job_details['salaries'][job], job_details['ids'][job]]})
+            alljob_dict.update({job: [job_details['titles'][job], job_details['locations'][job], job_details['salaries'][job], job_details['ids'][job]]})
         #title_arr = job_details['titles'][0]
         print(alljob_dict)
         return jsonify(alljob_dict)
@@ -103,7 +102,28 @@ def add_favourites():
     This is the add to favorites function
     '''
     data = request.args['favorite'].split(',')
-    print(data[0])
+    #print(data[4])
+    fav_job_id = data[4]
+    all_entry = models.Person.query.all()
+    #print(all_entry)
+    #all_fav = models.Person.query.filter_by(id=user_id).first()
+    all_fav = DB.session.query(  # pylint: disable=E1101 
+        models.Person).filter_by(id= '123321').first()
+    #print(all_fav.favorites)
+    temp_list = all_fav.favorites
+    client_id = all_fav.id
+    temp_email = all_fav.email
+    temp_applied = all_fav.applied
+    DB.session.delete(all_fav)
+    DB.session.commit()
+    temp_list.append(str(fav_job_id))
+    print(temp_list)
+    print(client_id)
+    print(temp_email)
+    print(temp_applied)
+    new_entry = models.Person(id=client_id, email=temp_email,favorites=temp_list,applied=temp_applied)    
+    DB.session.add(new_entry)
+    DB.session.commit()
     return "Something went wrong"
 if __name__ == "__main__":
     APP.run(

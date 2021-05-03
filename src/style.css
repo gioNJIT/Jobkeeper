@@ -89,3 +89,11 @@ button:hover{
 div{
     font-family:"Arial";
 }
+
+form {
+    display: inline-block;
+}
+
+body {
+    text-align: center;
+}
