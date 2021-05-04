@@ -150,8 +150,11 @@ def getAppliedJob():
         return "Something went wrong"
 
     
+
+
 @app.route('/api/v1/job/Favorites', methods=['POST'])
 def add_favourites():
+    """this function is called in jobs.js and adds a FAVORITED job to jobs tables"""
     temp_list = []
     data = request.get_json()
     #data = request.args['favorite'].split(',')
@@ -159,10 +162,8 @@ def add_favourites():
     fav_job_location = data['location']
     fav_job_salary = data['salary']
     fav_job_id = data['id']
-   # print(data)
-    
-    #print(all_entry)
-    
+
+
     
     #all_fav = models.Person.query.filter_by(id=user_id).first()
     all_fav = db.session.query(  # pylint: disable=E1101 
@@ -206,6 +207,68 @@ def add_favourites():
     
     
     return "Something went wrong"
+
+
+
+
+
+
+@app.route('/api/v1/job/Applied', methods=['POST'])
+def add_Applied():
+    """this function is called in jobs.js and adds an APPLIED job to jobs tables"""
+    temp_list = []
+    data = request.get_json()
+    #data = request.args['favorite'].split(',')
+    appl_job_title = data['title']
+    appl_job_location = data['location']
+    appl_job_salary = data['salary']
+    appl_job_id = data['id']
+
+
+    
+    #all_fav = models.Person.query.filter_by(id=user_id).first()
+    all_applied = db.session.query(  # pylint: disable=E1101 
+        models.Person).filter_by(id= records[0] ).first()
+    
+    if all_applied is None:
+        print("Record is not founded") 
+        new_entry = models.Person(id=records[0], email=records[1],favorites=[] , applied=[appl_job_id])    
+        db.session.add(new_entry)
+        db.session.commit()
+    else:
+        if appl_job_id not in all_applied.applied:
+            temp_list = all_applied.applied
+            client_id = all_applied.id
+            temp_email = all_applied.email
+            temp_fav = all_applied.favorites
+            db.session.delete(all_applied)
+            db.session.commit()
+            
+            temp_list.append(str(appl_job_id))
+            
+            
+            #if all_fav.favorites is None:
+            new_entry = models.Person(id=client_id, email=temp_email,favorites=temp_fav,applied=temp_list)    
+            db.session.add(new_entry)
+            db.session.commit()
+        else:
+            print("ID is already in applied list")
+
+        
+    applied = db.session.query(  # pylint: disable=E1101 
+        models.Jobs).filter_by(job_id= appl_job_id ).first()
+    
+    if applied is None:
+        print("Job is not founded")
+        new_entry = models.Jobs(job_id=appl_job_id, job_title=appl_job_title, job_location=appl_job_location, job_salary=appl_job_salary)    
+        db.session.add(new_entry)
+        db.session.commit()
+    else:
+        print("Job is already in the database")
+    
+    
+    return "Something went wrong"
+
 
 
 """

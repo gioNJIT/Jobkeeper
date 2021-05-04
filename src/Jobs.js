@@ -16,13 +16,16 @@ export function Jobs(props){
     const [title, set_title] = useState([]);
     const [empty, set_empty] = useState(false);
     
-    function sendFavoritedDataToServer(jobTitle, jobLocation, jobSalary, jobId) {
-    const url = BASE_URL + "/Favorites";
-    var data = JSON.stringify({
-      "title":jobTitle,
-      "location":jobLocation,
-      "salary" : jobSalary,
-      "id" : jobId
+    
+    
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@This function sends FAVORITED data to backend
+  function sendFavoritedDataToServer(jobTitle, jobLocation, jobSalary, jobId) {
+  const url = BASE_URL + "/Favorites";
+  var data = JSON.stringify({
+    "title":jobTitle,
+    "location":jobLocation,
+    "salary" : jobSalary,
+    "id" : jobId
       
     });
   fetch(url, {
@@ -46,8 +49,43 @@ export function Jobs(props){
   }
     
     
+
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@This function sends APPLIED data to backend
+  function sendAppliedDataToServer(jobTitle, jobLocation, jobSalary, jobId) {
+  const url = BASE_URL + "/Applied";
+  var data = JSON.stringify({
+    "title":jobTitle,
+    "location":jobLocation,
+    "salary" : jobSalary,
+    "id" : jobId
+      
+    });
+  fetch(url, {
+  method: 'POST', // or 'PUT'
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: data,
+})
+.then(response => {
+  console.log(response);
+  return response.json();
+})
+.then(data => {
+  console.log('Success:', data);
+})
+.catch((error) => {
+  console.error('Error:', error);
+});
     
-    
+  }
+
+
+   
+
+
+
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@FAVORITES FUNCTION    
     function Favourits(props){
         //console.log(job_info);
         //console.log(job_number);
@@ -55,8 +93,23 @@ export function Jobs(props){
         console.log("Added to the favourtie");
         
         sendFavoritedDataToServer(title[0], title[1], title[2], title[3])
+    }
+
+
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@APPLIED FUNCTION     
+     function Appliedfunc(props){
+        //console.log(job_info);
+        //console.log(job_number);
+        console.log(details[job_number]);
+        console.log("Added to the applied list");
+        
+        sendAppliedDataToServer(title[0], title[1], title[2], title[3])
         
     }
+    
+    
+    
+    
     
     useEffect(() => {
   set_job_info(details);
@@ -85,7 +138,8 @@ export function Jobs(props){
       </p>
      </pre>
      
-      <button type="button" className="button" onClick={Favourits}> Add To Favorites </button>
+      <button type="button" className="button" onClick={Favourits}> Add To Favorites List </button>
+      <button type="button" className="button2" onClick={Appliedfunc}> Add To Applied List </button>
       </center>
     </div>
   );

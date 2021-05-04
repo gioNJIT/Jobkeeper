@@ -226,7 +226,7 @@ const Applied = () => {
   const { idFavApplied } = useParams()
   let temp = {};
   function getAppliedJob(id) {
-    const url = BASE_URL + "/getfavJob" + "?id=" + id;
+    const url = BASE_URL + "/getAppliedJob" + "?id=" + id;
     fetch(url, {
       method: 'GET',
       headers: {
@@ -236,14 +236,15 @@ const Applied = () => {
     .then(response => {
       return response.json();
     }).then(responseData => {
-      //console.log(responseData);
+      console.log("this is from applied component:")
+      console.log(responseData);
       
       temp = responseData;
       
     });
   }
-  var tempid="123321"
-  getAppliedJob(tempid);
+  //var tempid="123321"
+  getAppliedJob(idFavApplied);
   
   return (
   
@@ -275,7 +276,7 @@ const Favorites = () => {
       
     });
   }
-  
+  var tempid="123321"
   getfavJob(idFavApplied);
   
   return (
