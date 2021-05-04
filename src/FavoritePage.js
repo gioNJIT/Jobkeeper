@@ -14,7 +14,6 @@ export function Fav (props){
     const [fav_list, set_fav_list] = useState([]);
     //console.log(id);
     
-    
     function getFavjob(id) {
     const url = BASE_URL + "/getfavJob" + "?id=" + id;
     fetch(url, {
