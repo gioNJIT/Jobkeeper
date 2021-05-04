@@ -19,18 +19,20 @@ class Person(db.Model):
         self.applied=applied
     
 class Jobs(db.Model):
-    job_id = db.Column(db.Integer, primary_key=True)
+    job_id = db.Column(db.String, primary_key=True)
     job_title=db.Column(db.String(120), nullable=False)
     job_location=db.Column(db.String(120), nullable=False)
     job_salary=db.Column(db.String(120), nullable=False)
+    job_link=db.Column(db.Text, nullable=False)
    #person_id = db.Column(db.Integer, db.ForeignKey('person.id'),####to be deleted
     #    nullable=False)
     
-    def __init__(self,job_id,job_title,job_location,job_salary):
+    def __init__(self,job_id,job_title,job_location,job_salary, job_link):
         self.job_id=job_id
         self.job_title=job_title
         self.job_location=job_location
         self.job_salary=job_salary
+        self.job_link=job_link
         
 def __repr__(self):
         return '<Person %r>' % self.email
