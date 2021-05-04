@@ -82,7 +82,7 @@ def search_job():
         parameterList.append(request.args['salary'])
         
         job_details = get_job_data(parameterList)
-        print(job_details)
+        #print(job_details)
         alljob_dict = {}
         if job_details['total_jobs'] <= 5:
             total = job_details['total_jobs']

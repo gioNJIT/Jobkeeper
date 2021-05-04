@@ -16,6 +16,9 @@ process.env.REACT_APP_GOOGLE_API_KEY;
 
 
 function App() {
+  
+  //const [id, set_id] = useState('');
+  
  function sendUserDataToServer(userID, firstName, user_email) {
     const url = BASE_URL + "/userInfo";
     var data = JSON.stringify({
@@ -41,8 +44,7 @@ function App() {
 .catch((error) => {
   console.error('Error:', error);
 });
-    
-  }
+}
 
  
 
@@ -63,6 +65,8 @@ function Login() {
     setIsAuthenticated(false);
     
   };
+  
+  
 
   return (
     <div>
@@ -104,9 +108,11 @@ function Login() {
         </nav>
         <Switch>
             <Route path="/Login"  component={Login} />
+            
+      
             {
             isAuthenticated ? 
-            <>
+            <div>
             <Redirect to="/Home" />
             <Route path="/Home" component={Home} />
             <Route path="/Applied/:jobDataTest"  component={Applied} />
@@ -114,11 +120,9 @@ function Login() {
             <Route path="/Logout"  component={Logout} />
             <Route path="/Applied/:jobDataTest"  component={Applied} />
             <Route path="/Favorites"  component={Favorites} />
-
-            </> : <Redirect to="/Login" />
+            </div>
+             : <Redirect to="/Login" />
             }
-      
-            
         </Switch>
           
          
@@ -256,14 +260,11 @@ const Favorites = () => {
   var id = 123321;
   getfavJob(id);
   
-  return (
-  
-  <Fragment>
+  return (<div>
     <h1>display "temp" dictionary here with favorites data </h1>
-
-  </Fragment>
+  </div>
   );
-  };
+};
 
 /*###leaving this here as a skeleton for another possible page
 const Contact = () => (
