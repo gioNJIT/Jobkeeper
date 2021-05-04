@@ -25,4 +25,9 @@ Upon following the steps you should have your client id and client secret.
 >>`export FLASK_DEBUG=1`
 >>`export FN_FLASK_SECRET_KEY=SOMETHING RANDOM AND SECRET`
 
+
+# JOB FIND APP
+1. `Use your API key from jooble api_key={your api key}`
+2. `Use your Database URL DATABASE_URL={your api key}`
+
 In your terminal type, `python -m flask run -p 8080`, to get it run.
