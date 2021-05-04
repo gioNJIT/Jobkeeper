@@ -1,12 +1,15 @@
 """CREATING A DATABASE FOR APP.PY USAGE"""
 from app import db
-from sqlalchemy.dialects.mysql import BIGINT
+
 
 class Person(db.Model):
     id = db.Column(db.String, primary_key=True)
     email = db.Column(db.String(50), nullable=False)
     favorites =  db.Column(db.ARRAY(db.String))
     applied =  db.Column(db.ARRAY(db.String))
+
+    
+    
     #Jobs = db.relationship('Address', backref='person', lazy=True)
     
     def __init__(self,id,email,favorites,applied):
@@ -16,7 +19,7 @@ class Person(db.Model):
         self.applied=applied
     
 class Jobs(db.Model):
-    job_id = db.Column(db.String, primary_key=True)
+    job_id = db.Column(db.Integer, primary_key=True)
     job_title=db.Column(db.String(120), nullable=False)
     job_location=db.Column(db.String(120), nullable=False)
     job_salary=db.Column(db.String(120), nullable=False)
