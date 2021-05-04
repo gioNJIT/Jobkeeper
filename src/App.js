@@ -8,6 +8,7 @@ import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
 import { Jobs } from './Jobs';
 import { Fav } from './FavoritePage';
+import { Appliedfunct } from './AppliedPage';
 import { GoogleLogin } from 'react-google-login';
 //import fetch from 'isomorphic-fetch';
 const BASE_URL = "/api/v1/job"
@@ -102,7 +103,7 @@ function Login() {
         <div>
         <nav>
             <Link class="button" to="/Home">Home</Link>|
-            <Link class="button" to={`/Applied/${idFavApplied}`}>Applied</Link>|
+            <Link class="button" to="/AppliedPage.js">Applied</Link>|
             <Link class="button" to="/Login">Login</Link>|
             <Link class="button" to="/FavoritePage.js">Favorite</Link>|
             <Link class="button" to="/Logout">Logout</Link>
@@ -116,7 +117,7 @@ function Login() {
             <div>
             
             <Route path="/Home" component={Home} />
-            <Route path="/Applied/:idFavApplied"  component={Applied} />
+            <Route path="/AppliedPage.js">  <Fav id = { idFavApplied } /> </Route>
             <Route path="/FavoritePage.js">  <Fav id = { idFavApplied } />   </Route>
             <Route path="/Logout"  component={Logout} />
             </div>
