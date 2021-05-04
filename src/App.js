@@ -7,6 +7,7 @@ import { ListItem } from './ListItem';
 import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
 import { Jobs } from './Jobs';
+import { Fav } from './FavoritePage';
 import { GoogleLogin } from 'react-google-login';
 //import fetch from 'isomorphic-fetch';
 const BASE_URL = "/api/v1/job"
@@ -17,6 +18,7 @@ process.env.REACT_APP_GOOGLE_API_KEY;
 
 function App() {
   
+
  function sendUserDataToServer(userID, firstName, user_email) {
     const url = BASE_URL + "/userInfo";
     var data = JSON.stringify({
@@ -42,8 +44,7 @@ function App() {
 .catch((error) => {
   console.error('Error:', error);
 });
-    
-  }
+}
 
  const [idFavApplied, setidFavApplied] = useState("");
 
@@ -65,6 +66,8 @@ function Login() {
     setIsAuthenticated(false);
     
   };
+  
+  
 
   return (
     <div>
@@ -101,25 +104,24 @@ function Login() {
             <Link class="button" to="/Home">Home</Link>|
             <Link class="button" to={`/Applied/${idFavApplied}`}>Applied</Link>|
             <Link class="button" to="/Login">Login</Link>|
-            <Link class="button" to={`/Favorites/${idFavApplied}`}>Favorites</Link>|
+            <Link class="button" to="/FavoritePage.js">Favorite</Link>|
             <Link class="button" to="/Logout">Logout</Link>
         </nav>
         <Switch>
             <Route path="/Login"  component={Login} />
+            
+      
             {
             isAuthenticated ? 
-            <>
-            <Redirect to="/Home" />
+            <div>
+            
             <Route path="/Home" component={Home} />
             <Route path="/Applied/:idFavApplied"  component={Applied} />
-            <Route path="/Favorites/:idFavApplied"  component={Favorites} />
+            <Route path="/FavoritePage.js">  <Fav id = { idFavApplied } />   </Route>
             <Route path="/Logout"  component={Logout} />
-            <Route path="/Favorites"  component={Favorites} />
-
-            </> : <Redirect to="/Login" />
+            </div>
+             : <Redirect to="/Login" />
             }
-      
-            
         </Switch>
           
          
@@ -194,7 +196,7 @@ const Home = () => {
     return (
       <Fragment>
         <div className="mainform">
-          <h1>Job search</h1>
+          <h1>JobFind</h1>
           {submitting &&
            <div>Searching jobs...</div>
           }
@@ -224,7 +226,7 @@ const Home = () => {
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@APPLIED PAGE
 const Applied = () => {
   const { idFavApplied } = useParams()
-  let temp = {};
+  const [favorited_list,set_favorited_list] = useState({});
   function getAppliedJob(id) {
     const url = BASE_URL + "/getAppliedJob" + "?id=" + id;
     fetch(url, {
@@ -239,7 +241,12 @@ const Applied = () => {
       console.log("this is from applied component:")
       console.log(responseData);
       
+
+      //console.log(responseData);
+      let temp = {};
+
       temp = responseData;
+      set_favorited_list(temp);
       
     });
   }
@@ -257,10 +264,15 @@ const Applied = () => {
 
 
 const Favorites = () => {
-  const { idFavApplied } = useParams()
-  let temp = {};
-  function getfavJob(id) {
-    const url = BASE_URL + "/getfavJob" + "?id=" + id;
+  var fake_id = "123321";
+  const { idFavApplied } = useParams();
+  console.log(idFavApplied);
+  const [favorited_list,set_favorited_list] = useState({});
+  //getFavoritedjob(idFavApplied);
+  let temp = [];
+  
+    console.log(idFavApplied);
+    const url = BASE_URL + "/getfavJob" + "?id=" + idFavApplied;
     fetch(url, {
       method: 'GET',
       headers: {
@@ -270,23 +282,22 @@ const Favorites = () => {
     .then(response => {
       return response.json();
     }).then(responseData => {
-      console.log(responseData);
+      //console.log(responseData);
       
       temp = responseData;
-      
+      console.log(temp);
+      //set_favorited_list(temp);
     });
-  }
-  var tempid="123321"
-  getfavJob(idFavApplied);
+    
+    //set_favorited_list(temp);
   
+  //console.log(temp);
   return (
-  
-  <Fragment>
+  <div>
     <h1>display "temp" dictionary here with favorites data </h1>
-
-  </Fragment>
+  </div>
   );
-  };
+};
 
 /*###leaving this here as a skeleton for another possible page
 const Contact = () => (

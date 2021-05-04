@@ -1,12 +1,14 @@
-import functools
+'''
+This is the app.py
+'''
 import json
 import os
-from dotenv import load_dotenv,find_dotenv
-from flask import Flask, send_from_directory, request, jsonify, Response
 import requests
-from Jooble_api import get_job_data
-from flask_cors import CORS
+from dotenv import load_dotenv, find_dotenv
+from flask import Flask, send_from_directory, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
+from Jooble_api import get_job_data
 
 
 
@@ -16,8 +18,8 @@ app = Flask(__name__, static_folder='./build/static')
 
 load_dotenv(find_dotenv())
 
-api_key = os.getenv('api_key')
-BASE_URL = 'https://jooble.org/api/' + str(api_key)
+API_KEY = os.getenv('api_key')
+BASE_URL = 'https://jooble.org/api/' + str(API_KEY)
 
 
 
@@ -33,6 +35,8 @@ db = SQLAlchemy(app)
 import models  # pylint: disable=wrong-import-position
 
 
+
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 app = Flask(__name__, static_folder='./build/static')
@@ -64,11 +68,13 @@ def userInfo():
   
     
     return "Test"
-    
-    
 @app.route('/api/v1/job/searchJob', methods=['GET'])
-def searchJob():
+def search_job():
+    '''
+    This is a job search function
+    '''
     parameterList = []
+    
     if 'occupation' in request.args:
         parameterList.append(request.args['occupation'])
         parameterList.append(request.args['location'])
@@ -76,48 +82,40 @@ def searchJob():
         parameterList.append(request.args['salary'])
         
         job_details = get_job_data(parameterList)
-        print(job_details)
+        #print(job_details)
         alljob_dict = {}
-        if(job_details['total_jobs'] <= 5):
+        if job_details['total_jobs'] <= 5:
             total = job_details['total_jobs']
         else:
             total = 5
-            
-        
         for job in range(0, total):
-            alljob_dict.update({job: [job_details['titles'][job], job_details['locations'][job], job_details['salaries'][job], str(job_details['ids'][job])]})
-        #alljob_dict = {0:[job_details['titles'][0], job_details['locations'][0], job_details['salaries'][0], job_details['ids'][0]]}
-        title_arr = job_details['titles'][0]
-        #print(alljob_dict)
+            alljob_dict.update({job: [job_details['titles'][job], job_details['locations'][job], job_details['salaries'][job], job_details['ids'][job]]})  # pylint: disable=C0301
+        #title_arr = job_details['titles'][0]
+        print(alljob_dict)
         return jsonify(alljob_dict)
-        
-        
-    else:
-        print("Could not find it")
-        return "Something went wrong"
-        
-    #print("Params received")
-
-
+    return "Something went wrong"
+    
 @app.route('/api/v1/job/getfavJob', methods=['GET'])
-def getfavJob():
-    favjobDict={}
+def getfav_job():
+    '''
+    This is the favorite function
+    '''
+    favjob_dict = []
+    #print(request.args)
     if 'id' in request.args:
-        player = models.Person.query.filter_by(id=request.args["id"]).first()
-        
-        print("received id:")
-        print(id)
-        print("favorites list from id:")
+        player = db.session.query(  # pylint: disable=E1101 
+        models.Person).filter_by(id= str(request.args['id']) ).first()
         print(player.favorites)
+        #print(player.favorites)
         
         for x in range(len(player.favorites)):
             
             jobquery= models.Jobs.query.filter_by(job_id=player.favorites[x]).first()
-            favjobDict[x]=[jobquery.job_id,jobquery.job_title,jobquery.job_location,jobquery.job_salary]
-            print(favjobDict[x])
+            favjob_dict.append([jobquery.job_id,jobquery.job_title,jobquery.job_location,jobquery.job_salary])
+            #print(favjob_dict[x])
         
-        
-        return jsonify(favjobDict)
+        print(favjob_dict)
+        return jsonify(favjob_dict)
         
         
     else:
@@ -161,10 +159,10 @@ def add_favourites():
     fav_job_title = data['title']
     fav_job_location = data['location']
     fav_job_salary = data['salary']
-    fav_job_id = data['id']
 
 
-    
+    fav_job_id = str(data['id'])
+
     #all_fav = models.Person.query.filter_by(id=user_id).first()
     all_fav = db.session.query(  # pylint: disable=E1101 
         models.Person).filter_by(id= records[0] ).first()
@@ -207,6 +205,7 @@ def add_favourites():
     
     
     return "Something went wrong"
+
 
 
 
@@ -271,41 +270,8 @@ def add_Applied():
 
 
 
-"""
-"EXAMPLE FUNCTION TO BE USED TO RETREIVE DATA FROM DATABASE"    
-def add_users():
-    player = models.Person.query.filter_by(id=123321).first()
-    if player is None:
-        print("could not find id number")
-        #addplayer = models.Person(username=data['user'], score=100)
-        #DB.session.add(addplayer)  # pylint: disable=no-member
-        #DB.session.commit()  # pylint: disable=no-member
-    else:
-        print("player")
-        print(player.id)
-    
-    
-# @socketio.on('UserLoggedIn')
-# def on_UserLoggedIn():
-#     socketio.emit('UserLoggedIn', broadcast=True, include_self=True)
-#     print("user has logged in")
-    
-    
-#add_users()"""
 
-    
-    
-    
-# @socketio.on('sendParams')
-# def receiveParams(data):
-#     parameterList = data["userParams"]
-#     job_details = get_job_data(parameterList)
-#     title_arr = job_details['titles']
-#     socketio.emit( "Updated_details",title_arr, broadcast=True, include_self=True)
-#     print(job_details['titles'])
-    
-    
-if __name__ == "__main__":    
+if __name__ == "__main__":
     app.run(
         host=os.getenv('IP', '0.0.0.0'),
         port=8081,
