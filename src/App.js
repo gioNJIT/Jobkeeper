@@ -7,6 +7,7 @@ import { ListItem } from './ListItem';
 import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
 import { Jobs } from './Jobs';
+import { Fav } from './FavoritePage';
 import { GoogleLogin } from 'react-google-login';
 //import fetch from 'isomorphic-fetch';
 const BASE_URL = "/api/v1/job"
@@ -103,7 +104,7 @@ function Login() {
             <Link class="button" to="/Home">Home</Link>|
             <Link class="button" to={`/Applied/${idFavApplied}`}>Applied</Link>|
             <Link class="button" to="/Login">Login</Link>|
-            <Link class="button" to={`/Favorites/${idFavApplied}`}>Favorites</Link>|
+            <Link class="button" to="/FavoritePage.js">Favorite</Link>|
             <Link class="button" to="/Logout">Logout</Link>
         </nav>
         <Switch>
@@ -113,12 +114,11 @@ function Login() {
             {
             isAuthenticated ? 
             <div>
-            <Redirect to="/Home" />
+            
             <Route path="/Home" component={Home} />
             <Route path="/Applied/:idFavApplied"  component={Applied} />
-            <Route path="/Favorites/:idFavApplied"  component={Favorites} />
+            <Route path="/FavoritePage.js">  <Fav id = { idFavApplied } />   </Route>
             <Route path="/Logout"  component={Logout} />
-            <Route path="/Favorites"  component={Favorites} />
             </div>
              : <Redirect to="/Login" />
             }
@@ -226,9 +226,9 @@ const Home = () => {
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@APPLIED PAGE
 const Applied = () => {
   const { idFavApplied } = useParams()
-  let temp = {};
+  const [favorited_list,set_favorited_list] = useState({});
   function getAppliedJob(id) {
-    const url = BASE_URL + "/getfavJob" + "?id=" + id;
+    const url = BASE_URL + "/getAppliedJob" + "?id=" + id;
     fetch(url, {
       method: 'GET',
       headers: {
@@ -239,8 +239,9 @@ const Applied = () => {
       return response.json();
     }).then(responseData => {
       //console.log(responseData);
-      
+      let temp = {};
       temp = responseData;
+      set_favorited_list(temp);
       
     });
   }
@@ -258,10 +259,15 @@ const Applied = () => {
 
 
 const Favorites = () => {
-  const { idFavApplied } = useParams()
-  let temp = {};
-  function getfavJob(id) {
-    const url = BASE_URL + "/getfavJob" + "?id=" + id;
+  var fake_id = "123321";
+  const { idFavApplied } = useParams();
+  console.log(idFavApplied);
+  const [favorited_list,set_favorited_list] = useState({});
+  //getFavoritedjob(idFavApplied);
+  let temp = [];
+  
+    console.log(idFavApplied);
+    const url = BASE_URL + "/getfavJob" + "?id=" + idFavApplied;
     fetch(url, {
       method: 'GET',
       headers: {
@@ -274,13 +280,15 @@ const Favorites = () => {
       //console.log(responseData);
       
       temp = responseData;
-      
+      console.log(temp);
+      //set_favorited_list(temp);
     });
-  }
+    
+    //set_favorited_list(temp);
   
-  getfavJob(idFavApplied);
-  
-  return (<div>
+  //console.log(temp);
+  return (
+  <div>
     <h1>display "temp" dictionary here with favorites data </h1>
   </div>
   );

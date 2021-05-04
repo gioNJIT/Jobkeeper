@@ -94,26 +94,27 @@ def search_job():
         print(alljob_dict)
         return jsonify(alljob_dict)
     return "Something went wrong"
-@app.route('/api/v1/job/getfav_job', methods=['GET'])
+    
+@app.route('/api/v1/job/getfavJob', methods=['GET'])
 def getfav_job():
     '''
     This is the favorite function
     '''
-    favjob_dict = {}
+    favjob_dict = []
+    #print(request.args)
     if 'id' in request.args:
-        player = models.Person.query.filter_by(id=request.args["id"]).first()
-        print("received id:")
-        print(id)
-        print("favorites list from id:")
+        player = db.session.query(  # pylint: disable=E1101 
+        models.Person).filter_by(id= str(request.args['id']) ).first()
         print(player.favorites)
+        #print(player.favorites)
         
         for x in range(len(player.favorites)):
             
             jobquery= models.Jobs.query.filter_by(job_id=player.favorites[x]).first()
-            favjob_dict[x]=[jobquery.job_id,jobquery.job_title,jobquery.job_location,jobquery.job_salary]
-            print(favjob_dict[x])
+            favjob_dict.append([jobquery.job_id,jobquery.job_title,jobquery.job_location,jobquery.job_salary])
+            #print(favjob_dict[x])
         
-        
+        print(favjob_dict)
         return jsonify(favjob_dict)
         
         
