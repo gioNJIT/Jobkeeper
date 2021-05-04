@@ -14,12 +14,14 @@ var clientId =
 process.env.REACT_APP_GOOGLE_API_KEY;
 
 
+
 function App() {
- function sendUserDataToServer(userID, firstName) {
+ function sendUserDataToServer(userID, firstName, user_email) {
     const url = BASE_URL + "/userInfo";
     var data = JSON.stringify({
       "clientId":userID,
-      "firstName":firstName
+      "firstName":firstName,
+      "email" : user_email
       
     });
   fetch(url, {
@@ -48,11 +50,12 @@ function Login() {
   const onSuccess = (res) => {
     console.log('Login Success: currentUser:', res.profileObj);
     setIsAuthenticated(true);
-    clientId = res.profileObj["googleId"]
+    clientId = res.profileObj["googleId"];
     var googleId = res.profileObj["googleId"];
     var firstName = res.profileObj["givenName"];
+    var user_email = res.profileObj["email"];
     // console.log(res.profileObj["googleId"])
-    sendUserDataToServer(googleId, firstName);
+    sendUserDataToServer(googleId, firstName, user_email);
   };
 
   const onFailure = (res) => {
@@ -60,8 +63,6 @@ function Login() {
     setIsAuthenticated(false);
     
   };
- 
- 
 
   return (
     <div>

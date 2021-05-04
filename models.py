@@ -3,7 +3,7 @@ from app import db
 from sqlalchemy.dialects.mysql import BIGINT
 
 class Person(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
     email = db.Column(db.String(50), nullable=False)
     favorites =  db.Column(db.ARRAY(db.String))
     applied =  db.Column(db.ARRAY(db.String))

@@ -16,30 +16,46 @@ export function Jobs(props){
     const [title, set_title] = useState([]);
     const [empty, set_empty] = useState(false);
     
+    function sendFavoritedDataToServer(jobTitle, jobLocation, jobSalary, jobId) {
+    const url = BASE_URL + "/Favorites";
+    var data = JSON.stringify({
+      "title":jobTitle,
+      "location":jobLocation,
+      "salary" : jobSalary,
+      "id" : jobId
+      
+    });
+  fetch(url, {
+  method: 'POST', // or 'PUT'
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: data,
+})
+.then(response => {
+  console.log(response);
+  return response.json();
+})
+.then(data => {
+  console.log('Success:', data);
+})
+.catch((error) => {
+  console.error('Error:', error);
+});
     
+  }
     
     
     
     
     function Favourits(props){
-        console.log(job_info);
-        console.log(job_number);
+        //console.log(job_info);
+        //console.log(job_number);
+        console.log(details[job_number]);
         console.log("Added to the favourtie");
         
-        const url = BASE_URL + "/Favorites" + "?favorite=" + details[job_number];
-      fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      })
-      .then(response => {
-        return response.json();
-      }).then(responseData => {
-        //console.log(responseData);
+        sendFavoritedDataToServer(title[0], title[1], title[2], title[3])
         
-        //set_job_details(responseData[0]);
-      });
     }
     
     useEffect(() => {

@@ -9,8 +9,6 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
 
-
-
 app = Flask(__name__, static_folder='./build/static')
 
 
@@ -31,6 +29,10 @@ db = SQLAlchemy(app)
 # IMPORTANT: This must be AFTER creating db variable to prevent
 # circular import issues
 import models  # pylint: disable=wrong-import-position
+user_id = 123321
+
+
+
 
 
 
@@ -40,8 +42,6 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
-
-records = []
 
 
 @app.route('/', defaults={"filename": "index.html"})
@@ -56,13 +56,8 @@ def index(filename):
 def userInfo():
     print("hello")
     temp_id = request.get_json()
-    user_id = str(temp_id['clientId'])
-    user_email = temp_id['email']
-    
-    records.append(user_id)
-    records.append(user_email)
-  
-    
+    user_id = temp_id['clientId']
+    print(user_id)
     return "Test"
     
     
@@ -76,7 +71,7 @@ def searchJob():
         parameterList.append(request.args['salary'])
         
         job_details = get_job_data(parameterList)
-        print(job_details)
+        #print(job_details)
         alljob_dict = {}
         if(job_details['total_jobs'] <= 5):
             total = job_details['total_jobs']
@@ -127,59 +122,38 @@ def getfavJob():
 
 
     
-@app.route('/api/v1/job/Favorites', methods=['POST'])
+@app.route('/api/v1/job/Favorites', methods=['GET'])
 def add_favourites():
     temp_list = []
-    data = request.get_json()
-    #data = request.args['favorite'].split(',')
-    fav_job_title = data['title']
-    fav_job_location = data['location']
-    fav_job_salary = data['salary']
-    fav_job_id = data['id']
-   # print(data)
-    
+    data = request.args['favorite'].split(',')
+    #print(data[4])
+    fav_job_id = data[4]
     #print(all_entry)
     
     
     #all_fav = models.Person.query.filter_by(id=user_id).first()
     all_fav = db.session.query(  # pylint: disable=E1101 
-        models.Person).filter_by(id= records[0] ).first()
+        models.Person).filter_by(id=user_id ).first()
+    #print(all_fav.favorites)
+    temp_list = all_fav.favorites
+    client_id = all_fav.id
+    temp_email = all_fav.email
+    temp_applied = all_fav.applied
+    db.session.delete(all_fav)
+    db.session.commit()
     
-    if all_fav is None:
-        print("Record is not founded")
-        new_entry = models.Person(id=records[0], email=records[1], favorites=[fav_job_id], applied=[])    
-        db.session.add(new_entry)
-        db.session.commit()
-    else:
-        if fav_job_id not in all_fav.favorites:
-            temp_list = all_fav.favorites
-            client_id = all_fav.id
-            temp_email = all_fav.email
-            temp_applied = all_fav.applied
-            db.session.delete(all_fav)
-            db.session.commit()
-            
-            temp_list.append(str(fav_job_id))
-            
-            
-            #if all_fav.favorites is None:
-            new_entry = models.Person(id=client_id, email=temp_email,favorites=temp_list,applied=temp_applied)    
-            db.session.add(new_entry)
-            db.session.commit()
-        else:
-            print("ID is already favorited")
-        
-        
-    favorited = db.session.query(  # pylint: disable=E1101 
-        models.Jobs).filter_by(job_id= fav_job_id ).first()
+    temp_list.append(str(fav_job_id))
+    print(temp_list)
+    print(client_id)
+    print(temp_email)
+    print(temp_applied)
     
-    if favorited is None:
-        print("Job is not founded")
-        new_entry = models.Jobs(job_id=fav_job_id, job_title=fav_job_title, job_location=fav_job_location, job_salary=fav_job_salary)    
-        db.session.add(new_entry)
-        db.session.commit()
-    else:
-        print("Job is already in the database")
+    #if all_fav.favorites is None:
+    new_entry = models.Person(id=client_id, email=temp_email,favorites=temp_list,applied=temp_applied)    
+    db.session.add(new_entry)
+    db.session.commit()
+        
+    #print(all_fav.favorites)
     
     
     return "Something went wrong"
