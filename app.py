@@ -221,7 +221,7 @@ def add_Applied():
     appl_job_title = data['title']
     appl_job_location = data['location']
     appl_job_salary = data['salary']
-    appl_job_id = data['id']
+    appl_job_id = str(data['id'])
 
 
     
