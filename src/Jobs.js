@@ -19,13 +19,14 @@ export function Jobs(props){
     
     
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@This function sends FAVORITED data to backend
-  function sendFavoritedDataToServer(jobTitle, jobLocation, jobSalary, jobId) {
+  function sendFavoritedDataToServer(jobTitle, jobLocation, jobSalary, jobId, jobLink) {
   const url = BASE_URL + "/Favorites";
   var data = JSON.stringify({
     "title":jobTitle,
     "location":jobLocation,
     "salary" : jobSalary,
-    "id" : jobId
+    "id" : jobId,
+    "link" : jobLink
       
     });
   fetch(url, {
@@ -51,13 +52,14 @@ export function Jobs(props){
     
 
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@This function sends APPLIED data to backend
-  function sendAppliedDataToServer(jobTitle, jobLocation, jobSalary, jobId) {
+  function sendAppliedDataToServer(jobTitle, jobLocation, jobSalary, jobId, jobLink) {
   const url = BASE_URL + "/Applied";
   var data = JSON.stringify({
     "title":jobTitle,
     "location":jobLocation,
     "salary" : jobSalary,
-    "id" : jobId
+    "id" : jobId,
+    "link" : jobLink
       
     });
   fetch(url, {
@@ -92,7 +94,7 @@ export function Jobs(props){
         console.log(details[job_number]);
         console.log("Added to the favourtie");
         
-        sendFavoritedDataToServer(title[0], title[1], title[2], title[3])
+        sendFavoritedDataToServer(title[0], title[1], title[2], title[3], title[4])
     }
 
 
@@ -103,7 +105,7 @@ export function Jobs(props){
         console.log(details[job_number]);
         console.log("Added to the applied list");
         
-        sendAppliedDataToServer(title[0], title[1], title[2], title[3])
+        sendAppliedDataToServer(title[0], title[1], title[2], title[3], title[4])
         
     }
     

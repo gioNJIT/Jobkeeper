@@ -48,6 +48,7 @@ export function Appliedfunct (props){
         <ul> Location : {item[2]}</ul>
         <ul> Salary : {item[3]}</ul>
         <ul> Id : {item[0]}</ul>
+        <ul> Link: <a href={item[4]}>Take me to the job</a></ul>
         </div>
     )
     )}

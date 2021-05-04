@@ -112,7 +112,7 @@ def getfav_job():
         for x in range(len(player.favorites)):
             
             jobquery= models.Jobs.query.filter_by(job_id=player.favorites[x]).first()
-            favjob_dict.append([jobquery.job_id,jobquery.job_title,jobquery.job_location,jobquery.job_salary])
+            favjob_dict.append([jobquery.job_id,jobquery.job_title,jobquery.job_location,jobquery.job_salary, jobquery.job_link])
             #print(favjob_dict[x])
         
         #print(favjob_dict)
@@ -136,7 +136,7 @@ def getAppliedJob():
         for x in range(len(player.applied)):
             
             jobquery= models.Jobs.query.filter_by(job_id=player.applied[x]).first()
-            appliedjobDict.append([jobquery.job_id,jobquery.job_title,jobquery.job_location,jobquery.job_salary])
+            appliedjobDict.append([jobquery.job_id,jobquery.job_title,jobquery.job_location,jobquery.job_salary, jobquery.job_link])
             #print(appliedjobDict[x])
         
         print(appliedjobDict)
@@ -159,9 +159,8 @@ def add_favourites():
     fav_job_title = data['title']
     fav_job_location = data['location']
     fav_job_salary = data['salary']
-
-
     fav_job_id = str(data['id'])
+    fav_job_link = data['link']
 
     #all_fav = models.Person.query.filter_by(id=user_id).first()
     all_fav = db.session.query(  # pylint: disable=E1101 
@@ -197,7 +196,7 @@ def add_favourites():
     
     if favorited is None:
         print("Job is not founded")
-        new_entry = models.Jobs(job_id=fav_job_id, job_title=fav_job_title, job_location=fav_job_location, job_salary=fav_job_salary)    
+        new_entry = models.Jobs(job_id=str(fav_job_id), job_title=fav_job_title, job_location=fav_job_location, job_salary=fav_job_salary, job_link=fav_job_link)    
         db.session.add(new_entry)
         db.session.commit()
     else:
@@ -222,6 +221,7 @@ def add_Applied():
     appl_job_location = data['location']
     appl_job_salary = data['salary']
     appl_job_id = str(data['id'])
+    appl_job_link = str(data['link'])
 
 
     
@@ -259,7 +259,7 @@ def add_Applied():
     
     if applied is None:
         print("Job is not founded")
-        new_entry = models.Jobs(job_id=appl_job_id, job_title=appl_job_title, job_location=appl_job_location, job_salary=appl_job_salary)    
+        new_entry = models.Jobs(job_id=appl_job_id, job_title=appl_job_title, job_location=appl_job_location, job_salary=appl_job_salary, job_link=appl_job_link)    
         db.session.add(new_entry)
         db.session.commit()
     else:
