@@ -13,8 +13,7 @@ export function Appliedfunct (props){
     var { id } = props;
     const [appl_list, set_appl_list] = useState([]);
     //console.log(id);
-    
-    
+    console.log("testttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt")    
     function getAppliedjob(id) {
     const url = BASE_URL + "/getAppliedJob" + "?id=" + id;
     fetch(url, {
@@ -26,7 +25,7 @@ export function Appliedfunct (props){
     .then(response => {
       return response.json();
     }).then(responseData => {
-      //console.log(responseData);
+      console.log(responseData);
       let temp = {};
       temp = responseData;
       set_appl_list(temp);
