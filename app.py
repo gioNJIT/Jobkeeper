@@ -121,7 +121,30 @@ def getfav_job():
         print("Could not find it")
         return "Something went wrong"
 
-
+@app.route('/api/v1/job/getAppliedJob', methods=['GET'])
+def getAppliedJob():
+    appliedjobDict={}
+    if 'id' in request.args:
+        player = models.Person.query.filter_by(id=request.args["id"]).first()
+        
+        print("received id:")
+        print(id)
+        print("applied list from id:")
+        print(player.applied)
+        
+        for x in range(len(player.applied)):
+            
+            jobquery= models.Jobs.query.filter_by(job_id=player.applied[x]).first()
+            appliedjobDict[x]=[jobquery.job_id,jobquery.job_title,jobquery.job_location,jobquery.job_salary]
+            print(appliedjobDict[x])
+        
+        
+        return jsonify(appliedjobDict)
+        
+        
+    else:
+        print("Could not find it")
+        return "Something went wrong"
 
     
 @app.route('/api/v1/job/Favorites', methods=['POST'])

@@ -17,8 +17,7 @@ process.env.REACT_APP_GOOGLE_API_KEY;
 
 function App() {
   
-  //const [id, set_id] = useState('');
-  
+
  function sendUserDataToServer(userID, firstName, user_email) {
     const url = BASE_URL + "/userInfo";
     var data = JSON.stringify({
@@ -46,7 +45,7 @@ function App() {
 });
 }
 
- 
+ const [idFavApplied, setidFavApplied] = useState("");
 
 function Login() {
   const onSuccess = (res) => {
@@ -56,7 +55,8 @@ function Login() {
     var googleId = res.profileObj["googleId"];
     var firstName = res.profileObj["givenName"];
     var user_email = res.profileObj["email"];
-    // console.log(res.profileObj["googleId"])
+    
+    setidFavApplied(googleId);
     sendUserDataToServer(googleId, firstName, user_email);
   };
 
@@ -101,9 +101,9 @@ function Login() {
         <div>
         <nav>
             <Link class="button" to="/Home">Home</Link>|
-            <Link class="button" to={`/Applied/${jobDataTest}`}>Applied</Link>|
+            <Link class="button" to={`/Applied/${idFavApplied}`}>Applied</Link>|
             <Link class="button" to="/Login">Login</Link>|
-            <Link class="button" to="/Favorites">Favorites</Link>|
+            <Link class="button" to={`/Favorites/${idFavApplied}`}>Favorites</Link>|
             <Link class="button" to="/Logout">Logout</Link>
         </nav>
         <Switch>
@@ -115,10 +115,9 @@ function Login() {
             <div>
             <Redirect to="/Home" />
             <Route path="/Home" component={Home} />
-            <Route path="/Applied/:jobDataTest"  component={Applied} />
-            <Route path="/Favorites"  component={Favorites} />
+            <Route path="/Applied/:idFavApplied"  component={Applied} />
+            <Route path="/Favorites/:idFavApplied"  component={Favorites} />
             <Route path="/Logout"  component={Logout} />
-            <Route path="/Applied/:jobDataTest"  component={Applied} />
             <Route path="/Favorites"  component={Favorites} />
             </div>
              : <Redirect to="/Login" />
@@ -145,7 +144,6 @@ const Home = () => {
     const [ourform, setform] = useState([]);
     const [submitting, setSubmitting] = useState(false);//this is the bool that gets used after the user clicks submit. it sends a message to user.
     const [is_shown, set_is_shown] = useState(false);
-    const isLogedIn = true;
     const handleSubmit = event => { //This function is called when the submit button is pressed. It creates a List from the form information and stores it in "ourform"
       event.preventDefault();
       setSubmitting(true);
@@ -227,18 +225,40 @@ const Home = () => {
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@APPLIED PAGE
 const Applied = () => {
-  const { jobDataTest } = useParams()
+  const { idFavApplied } = useParams()
+  let temp = {};
+  function getAppliedJob(id) {
+    const url = BASE_URL + "/getfavJob" + "?id=" + id;
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(response => {
+      return response.json();
+    }).then(responseData => {
+      //console.log(responseData);
+      
+      temp = responseData;
+      
+    });
+  }
+  var tempid="123321"
+  getAppliedJob(tempid);
+  
   return (
+  
   <Fragment>
-    
-    <h1>{ jobDataTest }</h1>
-    
+    <h1>display "temp" dictionary here with favorites data </h1>
+
   </Fragment>
-)
+  );
 };
 
 
 const Favorites = () => {
+  const { idFavApplied } = useParams()
   let temp = {};
   function getfavJob(id) {
     const url = BASE_URL + "/getfavJob" + "?id=" + id;
@@ -257,8 +277,8 @@ const Favorites = () => {
       
     });
   }
-  var id = 123321;
-  getfavJob(id);
+  
+  getfavJob(idFavApplied);
   
   return (<div>
     <h1>display "temp" dictionary here with favorites data </h1>
