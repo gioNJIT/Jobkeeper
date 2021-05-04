@@ -30,4 +30,10 @@ Upon following the steps you should have your client id and client secret.
 1. `Use your API key from jooble api_key={your api key}`
 2. `Use your Database URL DATABASE_URL={your api key}`
 
-In your terminal type, `python -m flask run -p 8080`, to get it run.
+
+## Run Application
+1. Run command in terminal (in your project directory): `python app.py`
+2. Run command in another terminal, `cd` into the project directory, and run `npm run start`
+3. Preview web page in browser '/'
+
+In your terminal type, `python -m flask run -p 8080`, to get it run (if `npm sun start` does not work).
