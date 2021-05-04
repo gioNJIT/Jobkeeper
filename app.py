@@ -1,7 +1,9 @@
 '''
 This is the app.py
 '''
+import json
 import os
+import requests
 from dotenv import load_dotenv, find_dotenv
 from flask import Flask, send_from_directory, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -130,7 +132,7 @@ def add_favourites():
     fav_job_title = data['title']
     fav_job_location = data['location']
     fav_job_salary = data['salary']
-    fav_job_id = data['id']
+    fav_job_id = str(data['id'])
    # print(data)
     
     #print(all_entry)
