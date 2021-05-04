@@ -136,6 +136,10 @@ export function Jobs(props){
       Salary: 
       {title[2]}
       </p>
+      <p>
+      Link: 
+      <a href={title[4]}>Take me to the job</a>
+      </p>
      </pre>
      
       <button type="button" className="button" onClick={Favourits}> Add To Favorites List </button>

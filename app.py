@@ -58,7 +58,6 @@ def index(filename):
 
 @app.route('/api/v1/job/userInfo', methods=['POST'])
 def userInfo():
-    print("hello")
     temp_id = request.get_json()
     user_id = str(temp_id['clientId'])
     user_email = temp_id['email']
@@ -89,7 +88,7 @@ def search_job():
         else:
             total = 5
         for job in range(0, total):
-            alljob_dict.update({job: [job_details['titles'][job], job_details['locations'][job], job_details['salaries'][job], job_details['ids'][job]]})  # pylint: disable=C0301
+            alljob_dict.update({job: [job_details['titles'][job], job_details['locations'][job], job_details['salaries'][job], job_details['ids'][job], job_details['links'][job]]})  # pylint: disable=C0301
         #title_arr = job_details['titles'][0]
         print(alljob_dict)
         return jsonify(alljob_dict)
@@ -105,16 +104,18 @@ def getfav_job():
     if 'id' in request.args:
         player = db.session.query(  # pylint: disable=E1101 
         models.Person).filter_by(id= str(request.args['id']) ).first()
-        print(player.favorites)
         #print(player.favorites)
-        
+        #print(player.favorites)
+        if player.favorites is None:
+            return "Nothing is Favorited"
+            
         for x in range(len(player.favorites)):
             
             jobquery= models.Jobs.query.filter_by(job_id=player.favorites[x]).first()
             favjob_dict.append([jobquery.job_id,jobquery.job_title,jobquery.job_location,jobquery.job_salary])
             #print(favjob_dict[x])
         
-        print(favjob_dict)
+        #print(favjob_dict)
         return jsonify(favjob_dict)
         
         
@@ -124,22 +125,21 @@ def getfav_job():
 
 @app.route('/api/v1/job/getAppliedJob', methods=['GET'])
 def getAppliedJob():
-    appliedjobDict={}
+    appliedjobDict=[]
     if 'id' in request.args:
-        player = models.Person.query.filter_by(id=request.args["id"]).first()
+        player = models.Person.query.filter_by(id=str(request.args["id"])).first()
         
-        print("received id:")
-        print(id)
-        print("applied list from id:")
-        print(player.applied)
+        if player.applied is None:
+            print("List is empty")
+            return "Applied list is empty"
         
         for x in range(len(player.applied)):
             
             jobquery= models.Jobs.query.filter_by(job_id=player.applied[x]).first()
-            appliedjobDict[x]=[jobquery.job_id,jobquery.job_title,jobquery.job_location,jobquery.job_salary]
-            print(appliedjobDict[x])
+            appliedjobDict.append([jobquery.job_id,jobquery.job_title,jobquery.job_location,jobquery.job_salary])
+            #print(appliedjobDict[x])
         
-        
+        print(appliedjobDict)
         return jsonify(appliedjobDict)
         
         
