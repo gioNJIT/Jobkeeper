@@ -2,10 +2,13 @@ import React, { Fragment } from "react";
 import './style.css';
 import Login from './Login';
 import Logout from './Logout';
+
 import { ListItem } from './ListItem';
 import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
 import { Jobs } from './Jobs';
+import { Fav } from './FavoritePage';
+import { Appliedfunct } from './AppliedPage';
 import { GoogleLogin } from 'react-google-login';
 //import fetch from 'isomorphic-fetch';
 const BASE_URL = "/api/v1/job"
@@ -13,17 +16,50 @@ var clientId =
 process.env.REACT_APP_GOOGLE_API_KEY;
 
 
+
 function App() {
   
 
- 
+ function sendUserDataToServer(userID, firstName, user_email) {
+    const url = BASE_URL + "/userInfo";
+    var data = JSON.stringify({
+      "clientId":userID,
+      "firstName":firstName,
+      "email" : user_email
+      
+    });
+  fetch(url, {
+  method: 'POST', // or 'PUT'
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: data,
+})
+.then(response => {
+  console.log(response);
+  return response.json();
+})
+.then(data => {
+  console.log('Success:', data);
+})
+.catch((error) => {
+  console.error('Error:', error);
+});
+}
+
+ const [idFavApplied, setidFavApplied] = useState("");
 
 function Login() {
   const onSuccess = (res) => {
     console.log('Login Success: currentUser:', res.profileObj);
     setIsAuthenticated(true);
-    clientId = res.profileObj["googleId"]
+    clientId = res.profileObj["googleId"];
+    var googleId = res.profileObj["googleId"];
+    var firstName = res.profileObj["givenName"];
+    var user_email = res.profileObj["email"];
     
+    setidFavApplied(googleId);
+    sendUserDataToServer(googleId, firstName, user_email);
   };
 
   const onFailure = (res) => {
@@ -31,8 +67,8 @@ function Login() {
     setIsAuthenticated(false);
     
   };
- 
- 
+  
+  
 
   return (
     <div>
@@ -72,28 +108,26 @@ function Login() {
         <div>
         <nav>
             <Link class="button" to="/Home">Home</Link>|
-            <Link class="button" to={`/Applied/${jobDataTest}`}>Applied</Link>|
+            <Link class="button" to="/AppliedPage.js">Applied</Link>|
             <Link class="button" to="/Login">Login</Link>|
-            <Link class="button" to="/Favorites">Favorites</Link>|
+            <Link class="button" to="/FavoritePage.js">Favorite</Link>|
             <Link class="button" to="/Logout">Logout</Link>
         </nav>
         <Switch>
             <Route path="/Login"  component={Login} />
+            
+      
             {
             isAuthenticated ? 
-            <>
-            <Redirect to="/Home" />
-            <Route path="/Home" component={Home} />
-            <Route path="/Applied/:jobDataTest"  component={Applied} />
-            <Route path="/Favorites"  component={Favorites} />
-            <Route path="/Logout"  component={Logout} />
-            <Route path="/Applied/:jobDataTest"  component={Applied} />
-            <Route path="/Favorites"  component={Favorites} />
-
-            </> : <Redirect to="/Login" />
-            }
-      
+            <div>
             
+            <Route path="/Home" component={Home} />
+            <Route path="/AppliedPage.js">  <Appliedfunct id = { idFavApplied } /> </Route>
+            <Route path="/FavoritePage.js">  <Fav id = { idFavApplied } />   </Route>
+            <Route path="/Logout"  component={Logout} />
+            </div>
+             : <Redirect to="/Login" />
+            }
         </Switch>
           
          
@@ -116,7 +150,6 @@ const Home = () => {
     const [ourform, setform] = useState([]);
     const [submitting, setSubmitting] = useState(false);//this is the bool that gets used after the user clicks submit. it sends a message to user.
     const [is_shown, set_is_shown] = useState(false);
-    const isLogedIn = true;
     const handleSubmit = event => { //This function is called when the submit button is pressed. It creates a List from the form information and stores it in "ourform"
       event.preventDefault();
       setSubmitting(true);
@@ -169,7 +202,7 @@ const Home = () => {
     return (
       <Fragment>
         <div className="mainform">
-          <h1>Job search</h1>
+          <h1>JobFind</h1>
           {submitting &&
            <div>Searching jobs...</div>
           }
@@ -198,21 +231,10 @@ const Home = () => {
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@APPLIED PAGE
 const Applied = () => {
-  const { jobDataTest } = useParams()
-  return (
-  <Fragment>
-    
-    <h1>{ jobDataTest }</h1>
-    
-  </Fragment>
-)
-};
-
-
-const Favorites = () => {
-  let temp = {};
-  function getfavJob(id) {
-    const url = BASE_URL + "/getfavJob" + "?id=" + id;
+  const { idFavApplied } = useParams()
+  const [favorited_list,set_favorited_list] = useState({});
+  function getAppliedJob(id) {
+    const url = BASE_URL + "/getAppliedJob" + "?id=" + id;
     fetch(url, {
       method: 'GET',
       headers: {
@@ -222,14 +244,20 @@ const Favorites = () => {
     .then(response => {
       return response.json();
     }).then(responseData => {
+      console.log("this is from applied component:")
       console.log(responseData);
       
+
+      //console.log(responseData);
+      let temp = {};
+
       temp = responseData;
+      set_favorited_list(temp);
       
     });
   }
-  var id = 123321;
-  getfavJob(id);
+  //var tempid="123321"
+  getAppliedJob(idFavApplied);
   
   return (
   
@@ -238,7 +266,44 @@ const Favorites = () => {
 
   </Fragment>
   );
-  };
+};
+
+
+const Favorites = () => {
+  var fake_id = "123321";
+  const { idFavApplied } = useParams();
+  console.log(idFavApplied);
+  const [favorited_list,set_favorited_list] = useState({});
+  //getFavoritedjob(idFavApplied);
+  let temp = [];
+  
+    console.log(idFavApplied);
+    const url = BASE_URL + "/getfavJob" + "?id=" + idFavApplied;
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(response => {
+      return response.json();
+    }).then(responseData => {
+      //console.log(responseData);
+      
+      temp = responseData;
+      console.log(temp);
+      //set_favorited_list(temp);
+    });
+    
+    //set_favorited_list(temp);
+  
+  //console.log(temp);
+  return (
+  <div>
+    <h1>display "temp" dictionary here with favorites data </h1>
+  </div>
+  );
+};
 
 /*###leaving this here as a skeleton for another possible page
 const Contact = () => (

@@ -33,7 +33,7 @@ db = SQLAlchemy(app)
 # IMPORTANT: This must be AFTER creating db variable to prevent
 # circular import issues
 import models  # pylint: disable=wrong-import-position
-
+db.create_all()
 
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
@@ -56,6 +56,7 @@ def index(filename):
     '''
     return send_from_directory('./build', filename)
 
+
 @app.route('/api/v1/job/userInfo', methods=['POST'])
 def userInfo():
     temp_id = request.get_json()
@@ -67,6 +68,26 @@ def userInfo():
   
     
     return "Test"
+def add(username, users):
+    '''
+    This is a add function
+    '''
+    if users['player'] == None:
+        users['player'] = username
+    else:
+        users['waitList'].append(username)
+    
+    return users  
+def add_user(username):
+    new_user = models.User(username=username, email='{0}@stuff.com'.format(username))
+    db.session.add(new_user)
+    db.session.commit()
+    all_people = models.User.query.all()
+    users = []
+    for person in all_people:
+        users.append(person.username)
+    return users
+    
 @app.route('/api/v1/job/searchJob', methods=['GET'])
 def search_job():
     '''
@@ -93,7 +114,8 @@ def search_job():
         print(alljob_dict)
         return jsonify(alljob_dict)
     return "Something went wrong"
-    
+
+      
 @app.route('/api/v1/job/getfavJob', methods=['GET'])
 def getfav_job():
     '''

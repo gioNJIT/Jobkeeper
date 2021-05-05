@@ -2,6 +2,12 @@
 from app import db
 
 
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    
 class Person(db.Model):
     id = db.Column(db.String, primary_key=True)
     email = db.Column(db.String(50), nullable=False)
@@ -34,6 +40,13 @@ class Jobs(db.Model):
         self.job_salary=job_salary
         self.job_link=job_link
         
+    
+
+    
+    
+    #Jobs = db.relationship('Address', backref='person', lazy=True)
+    
+       
 def __repr__(self):
         return '<Person %r>' % self.email
         
