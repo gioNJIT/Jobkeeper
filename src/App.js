@@ -91,10 +91,28 @@ function Login() {
     const [isAuthenticated, setIsAuthenticated] = useState(false); //thi is mocking the login authentication. change to false to test
     
     
+  function handleBackgroundHome() {
+    document.body.style.backgroundImage = "url('https://ak.picdn.net/shutterstock/videos/15071320/thumb/4.jpg')";
+    // document.body.style.backgroundRepeat = "repeat-y";
+    // document.body.style.backgroundPosition = "0px 150px";
+  };
+  
+  function handleBackgroundFavorites() {
+    document.body.style.backgroundImage = "url('https://i.pinimg.com/736x/96/da/38/96da382665b28aff01e7ffd0d88454b5.jpg')";
+  };
+  
+  function handleBackgroundApplied() {
+    document.body.style.backgroundImage = "url('https://www.clipartmax.com/png/small/1-11037_green-check-mark-transparent.png')";
+  }
   
   
-
+  function handleBackgroundLogin() {
+    document.body.style.backgroundImage = "url('')";
+  }
   
+    function handleBackgroundLogout() {
+    document.body.style.backgroundImage = "url('')";
+  }
   
   console.log(isAuthenticated);
   
@@ -102,11 +120,11 @@ function Login() {
     <Router>  
         <div>
         <nav>
-            <Link class="button" to="/Home">Home</Link>|
-            <Link class="button" to="/AppliedPage.js">Applied</Link>|
-            <Link class="button" to="/Login">Login</Link>|
-            <Link class="button" to="/FavoritePage.js">Favorite</Link>|
-            <Link class="button" to="/Logout">Logout</Link>
+            <Link onClick={handleBackgroundHome} class="button" to="/Home">Home</Link>|
+            <Link onClick={handleBackgroundApplied} class="button" to="/AppliedPage.js">Applied</Link>|
+            <Link onClick={handleBackgroundLogin} class="button" to="/Login">Login</Link>|
+            <Link onClick={handleBackgroundFavorites} class="button" to="/FavoritePage.js">Favorite</Link>|
+            <Link onClick={handleBackgroundLogout} class="button" to="/Logout">Logout</Link>
         </nav>
         <Switch>
             <Route path="/Login"  component={Login} />
@@ -137,9 +155,7 @@ function Login() {
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HOMEPAGE COMPONENT    
 const Home = () => {
     
-    document.body.style.backgroundImage = "url('https://hbr.org/resources/images/article_assets/2020/03/Mar20_12_115049941.jpg')";
-    document.body.style.backgroundRepeat = "no-repeat";
-    document.body.style.backgroundPosition = "0px 150px";
+
     
     
     
@@ -271,9 +287,7 @@ const Applied = () => {
 
 
 const Favorites = () => {
-    document.body.style.backgroundImage = "url('https://thumbs.dreamstime.com/z/gold-stars-white-background-pattern-seamless-vector-113430761.jpg')";
-    document.body.style.backgroundRepeat = "repeat-y";
-    // document.body.style.backgroundPosition = "0px 150px";
+
   
   
   var fake_id = "123321";
