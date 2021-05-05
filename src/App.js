@@ -90,8 +90,7 @@ function Login() {
     const jobDataTest = "this is a job posting"; //this is mocking the job posting data that will be passed to the components
     const [isAuthenticated, setIsAuthenticated] = useState(false); //thi is mocking the login authentication. change to false to test
     
-    
-  function handleBackgroundHome() {
+   function handleBackgroundHome() {
     document.body.style.backgroundImage = "url('https://ak.picdn.net/shutterstock/videos/15071320/thumb/4.jpg') ";
     // document.body.style.backgroundRepeat = "repeat-y";
     // document.body.style.backgroundPosition = "0px 150px";
@@ -112,7 +111,12 @@ function Login() {
   
     function handleBackgroundLogout() {
     document.body.style.backgroundImage = "url('')";
+    
   }
+  
+  
+
+  
   
   console.log(isAuthenticated);
   
@@ -154,11 +158,7 @@ function Login() {
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HOMEPAGE COMPONENT    
 const Home = () => {
-    
 
-    
-    
-    
     const [occupation, setoccupation] = useState(); //these are the react states that hold the form information
     const [job_details,set_job_details] = useState({});
     const [location, setlocation] = useState();
@@ -287,9 +287,6 @@ const Applied = () => {
 
 
 const Favorites = () => {
-
-  
-  
   var fake_id = "123321";
   const { idFavApplied } = useParams();
   console.log(idFavApplied);
@@ -325,13 +322,5 @@ const Favorites = () => {
   );
 };
 
-/*###leaving this here as a skeleton for another possible page
-const Contact = () => (
-  <Fragment>
-    <h1>Contact</h1>
-  </Fragment>
-  );
-    
-*/   
 
 export default App;
