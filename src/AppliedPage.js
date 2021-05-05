@@ -1,21 +1,18 @@
-import React, { Fragment } from "react";
+import React from "react";
 import './App.css';
-import Login from './Login';
-import Logout from './Logout';
-import { ListItem } from './ListItem';
 import  { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
-import PropTypes from 'prop-types';
-const BASE_URL = "/api/v1/job"
+const BASE_URL = "/api/v1/job";
 
 
 export function Appliedfunct (props){
     var { id } = props;
     const [appl_list, set_appl_list] = useState([]);
-    //console.log(id);
-    console.log("testttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt")    
+    console.log("testttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt"); 
     function getAppliedjob(id) {
-    const url = BASE_URL + "/getAppliedJob" + "?id=" + id;
+    const url = BASE_URL +
+    "/getAppliedJob" +
+    "?id=" +
+    id;
     fetch(url, {
       method: 'GET',
       headers: {
@@ -37,7 +34,7 @@ export function Appliedfunct (props){
   
    useEffect(() => {
     getAppliedjob(id);
-  }, []);
+  }, [id]);
     return (
   <div>
   <ul>

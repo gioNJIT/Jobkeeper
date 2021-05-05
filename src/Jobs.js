@@ -1,18 +1,15 @@
-import React, { Fragment } from "react";
+import React from "react";
 import './App.css';
-import Login from './Login';
-import Logout from './Logout';
-import { ListItem } from './ListItem';
 import  { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
-import PropTypes from 'prop-types';
 
 export function Jobs(props){
     const { details } = props;
     const {job_number} = props;
-    const test = props.details[0];
+    //const test = props.details[0];
     const BASE_URL = "/api/v1/job";
+    /* eslint-disable */
     const [job_info, set_job_info] = useState({});
+    /* eslint-disable */
     const [title, set_title] = useState([]);
     const [empty, set_empty] = useState(false);
     

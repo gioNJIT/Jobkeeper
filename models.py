@@ -1,12 +1,12 @@
 """CREATING A DATABASE FOR APP.PY USAGE"""
-from app import db
+from app import DB
 
 
-class Person(db.Model):
-    id = db.Column(db.String, primary_key=True)
-    email = db.Column(db.String(50), nullable=False)
-    favorites =  db.Column(db.ARRAY(db.String))
-    applied =  db.Column(db.ARRAY(db.String))
+class Person(DB.Model):
+    id = DB.Column(DB.String, primary_key=True)
+    email = DB.Column(DB.String(50), nullable=False)
+    favorites =  DB.Column(DB.ARRAY(DB.String))
+    applied =  DB.Column(DB.ARRAY(DB.String))
 
     
     
@@ -18,12 +18,12 @@ class Person(db.Model):
         self.favorites=favorites
         self.applied=applied
     
-class Jobs(db.Model):
-    job_id = db.Column(db.String, primary_key=True)
-    job_title=db.Column(db.String(120), nullable=False)
-    job_location=db.Column(db.String(120), nullable=False)
-    job_salary=db.Column(db.String(120), nullable=False)
-    job_link=db.Column(db.Text, nullable=False)
+class Jobs(DB.Model):
+    job_id = DB.Column(DB.String, primary_key=True)
+    job_title=DB.Column(DB.String(120), nullable=False)
+    job_location=DB.Column(DB.String(120), nullable=False)
+    job_salary=DB.Column(DB.String(120), nullable=False)
+    job_link=DB.Column(DB.Text, nullable=False)
    #person_id = db.Column(db.Integer, db.ForeignKey('person.id'),####to be deleted
     #    nullable=False)
     

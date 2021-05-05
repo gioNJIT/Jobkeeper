@@ -1,12 +1,7 @@
-import React, { Fragment } from "react";
+import React from "react";
 import './App.css';
-import Login from './Login';
-import Logout from './Logout';
-import { ListItem } from './ListItem';
 import  { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
-import PropTypes from 'prop-types';
-const BASE_URL = "/api/v1/job"
+const BASE_URL = "/api/v1/job";
 
 
 export function Fav (props){
@@ -15,7 +10,10 @@ export function Fav (props){
     //console.log(id);
     
     function getFavjob(id) {
-    const url = BASE_URL + "/getfavJob" + "?id=" + id;
+    const url = BASE_URL +
+    "/getfavJob" +
+    "?id=" + 
+    id;
     fetch(url, {
       method: 'GET',
       headers: {
@@ -37,7 +35,7 @@ export function Fav (props){
   
    useEffect(() => {
     getFavjob(id);
-  }, []);
+  }, [id]);
     return (
   <div>
   <ul>

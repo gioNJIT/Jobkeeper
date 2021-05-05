@@ -1,19 +1,17 @@
 '''
 This is the app.py
 '''
-import json
 import os
-import requests
 from dotenv import load_dotenv, find_dotenv
 from flask import Flask, send_from_directory, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from Jooble_api import get_job_data
+from jooble_api import get_job_data
 
 
 
 
-app = Flask(__name__, static_folder='./build/static')
+APP = Flask(__name__, static_folder='./build/static')
 
 
 load_dotenv(find_dotenv())
@@ -24,11 +22,11 @@ BASE_URL = 'https://jooble.org/api/' + str(API_KEY)
 
 
 # Point SQLAlchemy to your Heroku database
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+APP.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 # Gets rid of a warning
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
+DB = SQLAlchemy(APP)
 
 # IMPORTANT: This must be AFTER creating db variable to prevent
 # circular import issues
@@ -36,52 +34,45 @@ import models  # pylint: disable=wrong-import-position
 
 
 
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
+CORS = CORS(APP, resources={r"/*": {"origins": "*"}})
 
 
-app = Flask(__name__, static_folder='./build/static')
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+APP = Flask(__name__, static_folder='./build/static')
+APP.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+
+RECORDS = []
 
 
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
-
-records = []
-
-
-@app.route('/', defaults={"filename": "index.html"})
-@app.route('/<path:filename>')
+@APP.route('/', defaults={"filename": "index.html"})
+@APP.route('/<path:filename>')
 def index(filename):
     '''
     This is a index function
     '''
     return send_from_directory('./build', filename)
-
-@app.route('/api/v1/job/userInfo', methods=['POST'])
-def userInfo():
+@APP.route('/api/v1/job/user_info', methods=['POST'])
+def user_info():
+    '''
+    This is a user information function
+    '''
     temp_id = request.get_json()
     user_id = str(temp_id['clientId'])
     user_email = temp_id['email']
-    
-    records.append(user_id)
-    records.append(user_email)
-  
-    
+    RECORDS.append(user_id)
+    RECORDS.append(user_email)
     return "Test"
-@app.route('/api/v1/job/searchJob', methods=['GET'])
+@APP.route('/api/v1/job/searchJob', methods=['GET'])
 def search_job():
     '''
     This is a job search function
     '''
-    parameterList = []
-    
+    parameter_list = []
     if 'occupation' in request.args:
-        parameterList.append(request.args['occupation'])
-        parameterList.append(request.args['location'])
-        parameterList.append(request.args['radius'])
-        parameterList.append(request.args['salary'])
-        
-        job_details = get_job_data(parameterList)
-        #print(job_details)
+        parameter_list.append(request.args['occupation'])
+        parameter_list.append(request.args['location'])
+        parameter_list.append(request.args['radius'])
+        parameter_list.append(request.args['salary'])
+        job_details = get_job_data(parameter_list)
         alljob_dict = {}
         if job_details['total_jobs'] <= 5:
             total = job_details['total_jobs']
@@ -89,190 +80,121 @@ def search_job():
             total = 5
         for job in range(0, total):
             alljob_dict.update({job: [job_details['titles'][job], job_details['locations'][job], job_details['salaries'][job], job_details['ids'][job], job_details['links'][job]]})  # pylint: disable=C0301
-        #title_arr = job_details['titles'][0]
         print(alljob_dict)
         return jsonify(alljob_dict)
     return "Something went wrong"
-    
-@app.route('/api/v1/job/getfavJob', methods=['GET'])
+@APP.route('/api/v1/job/getfavJob', methods=['GET'])
 def getfav_job():
     '''
     This is the favorite function
     '''
     favjob_dict = []
-    #print(request.args)
     if 'id' in request.args:
-        player = db.session.query(  # pylint: disable=E1101 
-        models.Person).filter_by(id= str(request.args['id']) ).first()
-        #print(player.favorites)
-        #print(player.favorites)
+        player = DB.session.query(models.Person).filter_by(id=str(request.args['id'])).first() # pylint: disable=E1101
         if player.favorites is None:
             return "Nothing is Favorited"
-            
-        for x in range(len(player.favorites)):
-            
-            jobquery= models.Jobs.query.filter_by(job_id=player.favorites[x]).first()
-            favjob_dict.append([jobquery.job_id,jobquery.job_title,jobquery.job_location,jobquery.job_salary, jobquery.job_link])
-            #print(favjob_dict[x])
-        
-        #print(favjob_dict)
+        for fav in range(len(player.favorites)):
+            jobquery = models.Jobs.query.filter_by(job_id=player.favorites[fav]).first()
+            favjob_dict.append([jobquery.job_id, jobquery.job_title, jobquery.job_location, jobquery.job_salary, jobquery.job_link]) # pylint: disable=C0301
         return jsonify(favjob_dict)
-        
-        
-    else:
-        print("Could not find it")
-        return "Something went wrong"
-
-@app.route('/api/v1/job/getAppliedJob', methods=['GET'])
-def getAppliedJob():
-    appliedjobDict=[]
+    return "Something went wrong"
+@APP.route('/api/v1/job/get_applied_job', methods=['GET'])
+def get_applied_job():
+    '''
+    This is the get the applied job function
+    '''
+    appliedjob_dict = []
     if 'id' in request.args:
         player = models.Person.query.filter_by(id=str(request.args["id"])).first()
-        
         if player.applied is None:
             print("List is empty")
             return "Applied list is empty"
-        
-        for x in range(len(player.applied)):
-            
-            jobquery= models.Jobs.query.filter_by(job_id=player.applied[x]).first()
-            appliedjobDict.append([jobquery.job_id,jobquery.job_title,jobquery.job_location,jobquery.job_salary, jobquery.job_link])
-            #print(appliedjobDict[x])
-        
-        print(appliedjobDict)
-        return jsonify(appliedjobDict)
-        
-        
-    else:
-        print("Could not find it")
-        return "Something went wrong"
-
-    
-
-
-@app.route('/api/v1/job/Favorites', methods=['POST'])
+        for fav in range(len(player.applied)):
+            jobquery = models.Jobs.query.filter_by(job_id=player.applied[fav]).first()
+            appliedjob_dict.append([jobquery.job_id, jobquery.job_title, jobquery.job_location, jobquery.job_salary, jobquery.job_link]) # pylint: disable=C0301
+        print(appliedjob_dict)
+        return jsonify(appliedjob_dict)
+    return "Something went wrong"
+@APP.route('/api/v1/job/Favorites', methods=['POST'])
 def add_favourites():
     """this function is called in jobs.js and adds a FAVORITED job to jobs tables"""
     temp_list = []
     data = request.get_json()
-    #data = request.args['favorite'].split(',')
     fav_job_title = data['title']
     fav_job_location = data['location']
     fav_job_salary = data['salary']
     fav_job_id = str(data['id'])
     fav_job_link = data['link']
-
-    #all_fav = models.Person.query.filter_by(id=user_id).first()
-    all_fav = db.session.query(  # pylint: disable=E1101 
-        models.Person).filter_by(id= records[0] ).first()
-    
+    all_fav = DB.session.query(models.Person).filter_by(id=RECORDS[0]).first() # pylint: disable=E1101
     if all_fav is None:
         print("Record is not founded")
-        new_entry = models.Person(id=records[0], email=records[1], favorites=[fav_job_id], applied=[])    
-        db.session.add(new_entry)
-        db.session.commit()
+        new_entry = models.Person(id=RECORDS[0], email=RECORDS[1], favorites=[fav_job_id], applied=[]) # pylint: disable=C0301,C0303 
+        DB.session.add(new_entry) # pylint: disable=E1101
+        DB.session.commit() # pylint: disable=E1101
     else:
         if fav_job_id not in all_fav.favorites:
             temp_list = all_fav.favorites
             client_id = all_fav.id
             temp_email = all_fav.email
             temp_applied = all_fav.applied
-            db.session.delete(all_fav)
-            db.session.commit()
-            
+            DB.session.delete(all_fav) # pylint: disable=E1101
+            DB.session.commit() # pylint: disable=E1101
             temp_list.append(str(fav_job_id))
-            
-            
-            #if all_fav.favorites is None:
-            new_entry = models.Person(id=client_id, email=temp_email,favorites=temp_list,applied=temp_applied)    
-            db.session.add(new_entry)
-            db.session.commit()
+            new_entry = models.Person(id=client_id, email=temp_email, favorites=temp_list, applied=temp_applied)   # pylint: disable=C0301,C0303 
+            DB.session.add(new_entry) # pylint: disable=E1101
+            DB.session.commit() # pylint: disable=E1101
         else:
             print("ID is already favorited")
-        
-        
-    favorited = db.session.query(  # pylint: disable=E1101 
-        models.Jobs).filter_by(job_id= fav_job_id ).first()
-    
+    favorited = DB.session.query(models.Jobs).filter_by(job_id=fav_job_id).first() # pylint: disable=E1101
     if favorited is None:
         print("Job is not founded")
-        new_entry = models.Jobs(job_id=str(fav_job_id), job_title=fav_job_title, job_location=fav_job_location, job_salary=fav_job_salary, job_link=fav_job_link)    
-        db.session.add(new_entry)
-        db.session.commit()
+        new_entry = models.Jobs(job_id=str(fav_job_id), job_title=fav_job_title, job_location=fav_job_location, job_salary=fav_job_salary, job_link=fav_job_link)  # pylint: disable=C0301,C0303
+        DB.session.add(new_entry) # pylint: disable=E1101
+        DB.session.commit() # pylint: disable=E1101
     else:
         print("Job is already in the database")
-    
-    
     return "Something went wrong"
-
-
-
-
-
-
-
-@app.route('/api/v1/job/Applied', methods=['POST'])
-def add_Applied():
+@APP.route('/api/v1/job/Applied', methods=['POST'])
+def add_applied():
     """this function is called in jobs.js and adds an APPLIED job to jobs tables"""
     temp_list = []
     data = request.get_json()
-    #data = request.args['favorite'].split(',')
     appl_job_title = data['title']
     appl_job_location = data['location']
     appl_job_salary = data['salary']
     appl_job_id = str(data['id'])
     appl_job_link = str(data['link'])
-
-
-    
-    #all_fav = models.Person.query.filter_by(id=user_id).first()
-    all_applied = db.session.query(  # pylint: disable=E1101 
-        models.Person).filter_by(id= records[0] ).first()
-    
+    all_applied = DB.session.query(models.Person).filter_by(id=RECORDS[0]).first() # pylint: disable=E1101
     if all_applied is None:
-        print("Record is not founded") 
-        new_entry = models.Person(id=records[0], email=records[1],favorites=[] , applied=[appl_job_id])    
-        db.session.add(new_entry)
-        db.session.commit()
+        print("Record is not founded")
+        new_entry = models.Person(id=RECORDS[0], email=RECORDS[1], favorites=[], applied=[appl_job_id]) # pylint: disable=C0301
+        DB.session.add(new_entry) # pylint: disable=E1101
+        DB.session.commit() # pylint: disable=E1101
     else:
         if appl_job_id not in all_applied.applied:
             temp_list = all_applied.applied
             client_id = all_applied.id
             temp_email = all_applied.email
             temp_fav = all_applied.favorites
-            db.session.delete(all_applied)
-            db.session.commit()
-            
+            DB.session.delete(all_applied) # pylint: disable=E1101
+            DB.session.commit() # pylint: disable=E1101
             temp_list.append(str(appl_job_id))
-            
-            
-            #if all_fav.favorites is None:
-            new_entry = models.Person(id=client_id, email=temp_email,favorites=temp_fav,applied=temp_list)    
-            db.session.add(new_entry)
-            db.session.commit()
+            new_entry = models.Person(id=client_id, email=temp_email, favorites=temp_fav, applied=temp_list) # pylint: disable=C0301
+            DB.session.add(new_entry) # pylint: disable=E1101
+            DB.session.commit() # pylint: disable=E1101
         else:
             print("ID is already in applied list")
-
-        
-    applied = db.session.query(  # pylint: disable=E1101 
-        models.Jobs).filter_by(job_id= appl_job_id ).first()
-    
+    applied = DB.session.query(models.Jobs).filter_by(job_id=appl_job_id).first() # pylint: disable=E1101
     if applied is None:
         print("Job is not founded")
-        new_entry = models.Jobs(job_id=appl_job_id, job_title=appl_job_title, job_location=appl_job_location, job_salary=appl_job_salary, job_link=appl_job_link)    
-        db.session.add(new_entry)
-        db.session.commit()
+        new_entry = models.Jobs(job_id=appl_job_id, job_title=appl_job_title, job_location=appl_job_location, job_salary=appl_job_salary, job_link=appl_job_link)  # pylint: disable=C0301
+        DB.session.add(new_entry) # pylint: disable=E1101
+        DB.session.commit() # pylint: disable=E1101
     else:
         print("Job is already in the database")
-    
-    
     return "Something went wrong"
-
-
-
-
 if __name__ == "__main__":
-    app.run(
+    APP.run(
         host=os.getenv('IP', '0.0.0.0'),
         port=8081,
         debug=True,
