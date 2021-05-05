@@ -136,7 +136,13 @@ function Login() {
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HOMEPAGE COMPONENT    
 const Home = () => {
-
+    
+    document.body.style.backgroundImage = "url('https://hbr.org/resources/images/article_assets/2020/03/Mar20_12_115049941.jpg')";
+    document.body.style.backgroundRepeat = "no-repeat";
+    document.body.style.backgroundPosition = "0px 150px";
+    
+    
+    
     const [occupation, setoccupation] = useState(); //these are the react states that hold the form information
     const [job_details,set_job_details] = useState({});
     const [location, setlocation] = useState();
@@ -265,6 +271,11 @@ const Applied = () => {
 
 
 const Favorites = () => {
+    document.body.style.backgroundImage = "url('https://thumbs.dreamstime.com/z/gold-stars-white-background-pattern-seamless-vector-113430761.jpg')";
+    document.body.style.backgroundRepeat = "repeat-y";
+    // document.body.style.backgroundPosition = "0px 150px";
+  
+  
   var fake_id = "123321";
   const { idFavApplied } = useParams();
   console.log(idFavApplied);
