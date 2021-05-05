@@ -117,7 +117,7 @@ function Login() {
             <div>
             
             <Route path="/Home" component={Home} />
-            <Route path="/AppliedPage.js">  <Fav id = { idFavApplied } /> </Route>
+            <Route path="/AppliedPage.js">  <Appliedfunct id = { idFavApplied } /> </Route>
             <Route path="/FavoritePage.js">  <Fav id = { idFavApplied } />   </Route>
             <Route path="/Logout"  component={Logout} />
             </div>
