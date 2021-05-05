@@ -42,7 +42,7 @@ export function Fav (props){
   <div>
   <ul>
     { fav_list.map((item, index) => (
-        <div className="single_entry" >
+        <div className="dark-matter-favorites">
         <ul> Title: {item[1]}</ul>
         <ul> Location : {item[2]}</ul>
         <ul> Salary : {item[3]}</ul>

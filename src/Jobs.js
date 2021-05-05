@@ -145,7 +145,7 @@ export function Jobs(props){
      </pre>
      
       <button type="button" className="button" onClick={Favourits}> Add To Favorites List </button>
-      <button type="button" className="button2" onClick={Appliedfunc}> Add To Applied List </button>
+      <button type="button" className="button" onClick={Appliedfunc}> Add To Applied List </button>
       </center>
     </div>
   );

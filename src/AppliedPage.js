@@ -42,7 +42,7 @@ export function Appliedfunct (props){
   <div>
   <ul>
     { appl_list.map((item, index) => (
-        <div className="single_entry" >
+        <div className="dark-matter-applied" >
         <ul> Title: {item[1]}</ul>
         <ul> Location : {item[2]}</ul>
         <ul> Salary : {item[3]}</ul>
