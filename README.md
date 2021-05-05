@@ -35,5 +35,11 @@ Upon following the steps you should have your client id and client secret.
 1. Run command in terminal (in your project directory): `python app.py`
 2. Run command in another terminal, `cd` into the project directory, and run `npm run start`
 3. Preview web page in browser '/'
-
 In your terminal type, `python -m flask run -p 8080`, to get it run (if `npm sun start` does not work).
+
+## Deploy to Heroku
+*Make sure you remove the old heroku app instances from your local repositary*
+1. Create a Heroku app: `heroku create --buildpack heroku/python`
+2. Add nodejs buildpack: `heroku buildpacks:add --index 1 heroku/nodejs`
+3. Push to Heroku: `git push heroku main`
+
