@@ -125,6 +125,7 @@ def getfav_job():
 
 @app.route('/api/v1/job/getAppliedJob', methods=['GET'])
 def getAppliedJob():
+    """ This function sends data to the applied page"""
     appliedjobDict=[]
     if 'id' in request.args:
         player = models.Person.query.filter_by(id=str(request.args["id"])).first()
