@@ -112,6 +112,7 @@ function Login() {
   
     function handleBackgroundLogout() {
     document.body.style.backgroundImage = "url('')";
+    
   }
   
   
