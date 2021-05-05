@@ -92,7 +92,7 @@ function Login() {
     
     
   function handleBackgroundHome() {
-    document.body.style.backgroundImage = "url('https://ak.picdn.net/shutterstock/videos/15071320/thumb/4.jpg')";
+    document.body.style.backgroundImage = "url('https://ak.picdn.net/shutterstock/videos/15071320/thumb/4.jpg') ";
     // document.body.style.backgroundRepeat = "repeat-y";
     // document.body.style.backgroundPosition = "0px 150px";
   };
