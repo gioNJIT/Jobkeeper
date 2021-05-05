@@ -275,7 +275,7 @@ def add_Applied():
 if __name__ == "__main__":
     app.run(
         host=os.getenv('IP', '0.0.0.0'),
-        port=8081,
+        port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
         debug=True,
         use_reloader=True
         )
