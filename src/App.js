@@ -74,11 +74,6 @@ function Login() {
     <div>
       <GoogleLogin
         clientId={clientId}
-        render={renderProps => (
-        <button class="button" onCLick={renderProps.ocClick} disabled={renderProps.disabled}>
-        Login to JobFind
-        </button>
-        )}
         buttonText="Login"
         onSuccess={onSuccess}
         onFailure={onFailure}
@@ -305,13 +300,5 @@ const Favorites = () => {
   );
 };
 
-/*###leaving this here as a skeleton for another possible page
-const Contact = () => (
-  <Fragment>
-    <h1>Contact</h1>
-  </Fragment>
-  );
-    
-*/   
 
 export default App;
