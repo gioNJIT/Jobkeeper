@@ -45,7 +45,8 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
-records = []
+global_id = ''
+global_email = ''
 
 
 @app.route('/', defaults={"filename": "index.html"})
@@ -59,11 +60,11 @@ def index(filename):
 @app.route('/api/v1/job/userInfo', methods=['POST'])
 def userInfo():
     temp_id = request.get_json()
-    user_id = str(temp_id['clientId'])
-    user_email = temp_id['email']
+    global_id = str(temp_id['clientId'])
+    global_email = temp_id['email']
     
-    records.append(user_id)
-    records.append(user_email)
+    #records.append(user_id)
+    #records.append(user_email)
   
     
     return "Test"
@@ -165,11 +166,11 @@ def add_favourites():
 
     #all_fav = models.Person.query.filter_by(id=user_id).first()
     all_fav = db.session.query(  # pylint: disable=E1101 
-        models.Person).filter_by(id= records[0] ).first()
+        models.Person).filter_by(id= global_id ).first()
     
     if all_fav is None:
         print("Record is not founded")
-        new_entry = models.Person(id=records[0], email=records[1], favorites=[fav_job_id], applied=[])    
+        new_entry = models.Person(id=global_id, email=global_email, favorites=[fav_job_id], applied=[])    
         db.session.add(new_entry)
         db.session.commit()
     else:
@@ -228,11 +229,11 @@ def add_Applied():
     
     #all_fav = models.Person.query.filter_by(id=user_id).first()
     all_applied = db.session.query(  # pylint: disable=E1101 
-        models.Person).filter_by(id= records[0] ).first()
+        models.Person).filter_by(id= global_id ).first()
     
     if all_applied is None:
         print("Record is not founded") 
-        new_entry = models.Person(id=records[0], email=records[1],favorites=[] , applied=[appl_job_id])    
+        new_entry = models.Person(id=global_id, email=global_email,favorites=[] , applied=[appl_job_id])    
         db.session.add(new_entry)
         db.session.commit()
     else:
