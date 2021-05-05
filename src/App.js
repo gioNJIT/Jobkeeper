@@ -48,7 +48,6 @@ function App() {
 }
 
  const [idFavApplied, setidFavApplied] = useState("");
- const [emailFavApplied, setemailFavApplied] = useState("");
 
 function Login() {
   const onSuccess = (res) => {
@@ -60,7 +59,6 @@ function Login() {
     var user_email = res.profileObj["email"];
     
     setidFavApplied(googleId);
-    setemailFavApplied(user_email);
     sendUserDataToServer(googleId, firstName, user_email);
   };
 
@@ -92,8 +90,7 @@ function Login() {
     const jobDataTest = "this is a job posting"; //this is mocking the job posting data that will be passed to the components
     const [isAuthenticated, setIsAuthenticated] = useState(false); //thi is mocking the login authentication. change to false to test
     
-    
-  function handleBackgroundHome() {
+   function handleBackgroundHome() {
     document.body.style.backgroundImage = "url('https://ak.picdn.net/shutterstock/videos/15071320/thumb/4.jpg') ";
     // document.body.style.backgroundRepeat = "repeat-y";
     // document.body.style.backgroundPosition = "0px 150px";
@@ -115,7 +112,10 @@ function Login() {
     function handleBackgroundLogout() {
     document.body.style.backgroundImage = "url('')";
     
-  }
+  }   
+  
+  
+
   
   
   console.log(isAuthenticated);
@@ -124,7 +124,6 @@ function Login() {
     <Router>  
         <div>
         <nav>
-
             <Link onClick={handleBackgroundHome} class="button" to="/Home">Home</Link>|
             <Link onClick={handleBackgroundApplied} class="button" to="/AppliedPage.js">Applied</Link>|
             <Link onClick={handleBackgroundLogin} class="button" to="/Login">Login</Link>|
@@ -139,7 +138,7 @@ function Login() {
             isAuthenticated ? 
             <div>
             
-            <Route path="/Home/:idFavApplied" component={Home}/>
+            <Route path="/Home" component={Home} />
             <Route path="/AppliedPage.js">  <Appliedfunct id = { idFavApplied } /> </Route>
             <Route path="/FavoritePage.js">  <Fav id = { idFavApplied } />   </Route>
             <Route path="/Logout"  component={Logout} />
@@ -160,7 +159,6 @@ function Login() {
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HOMEPAGE COMPONENT    
 const Home = () => {
 
-    const { idFavApplied } = useParams();
     const [occupation, setoccupation] = useState(); //these are the react states that hold the form information
     const [job_details,set_job_details] = useState({});
     const [location, setlocation] = useState();
@@ -207,11 +205,11 @@ const Home = () => {
     let list;
     if (is_shown){
       list = <div className="dark-matter">
-           <Jobs  details={job_details} job_number="0" google_id={idFavApplied}/>
-           <Jobs  details={job_details} job_number="1" google_id={idFavApplied}/>
-           <Jobs  details={job_details} job_number="2" google_id={idFavApplied}/>
-           <Jobs  details={job_details} job_number="3" google_id={idFavApplied}/>
-           <Jobs  details={job_details} job_number="4" google_id={idFavApplied}/>
+           <Jobs  details={job_details} job_number="0"/>
+           <Jobs  details={job_details} job_number="1"/>
+           <Jobs  details={job_details} job_number="2"/>
+           <Jobs  details={job_details} job_number="3"/>
+           <Jobs  details={job_details} job_number="4"/>
            </div>;
     }
     else{
@@ -289,9 +287,6 @@ const Applied = () => {
 
 
 const Favorites = () => {
-
-  
-  
   var fake_id = "123321";
   const { idFavApplied } = useParams();
   console.log(idFavApplied);
