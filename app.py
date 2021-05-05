@@ -45,7 +45,7 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
-global_id = ''
+#global_id = ''
 global_email = ''
 
 
@@ -158,6 +158,7 @@ def add_favourites():
     temp_list = []
     data = request.get_json()
     #data = request.args['favorite'].split(',')
+    uni_id = data['user_id']
     fav_job_title = data['title']
     fav_job_location = data['location']
     fav_job_salary = data['salary']
@@ -166,11 +167,11 @@ def add_favourites():
 
     #all_fav = models.Person.query.filter_by(id=user_id).first()
     all_fav = db.session.query(  # pylint: disable=E1101 
-        models.Person).filter_by(id= global_id ).first()
+        models.Person).filter_by(id= uni_id ).first()
     
     if all_fav is None:
         print("Record is not founded")
-        new_entry = models.Person(id=global_id, email=global_email, favorites=[fav_job_id], applied=[])    
+        new_entry = models.Person(id=uni_id, email=global_email, favorites=[fav_job_id], applied=[])    
         db.session.add(new_entry)
         db.session.commit()
     else:
@@ -219,6 +220,7 @@ def add_Applied():
     temp_list = []
     data = request.get_json()
     #data = request.args['favorite'].split(',')
+    uni_id = data['user_id']
     appl_job_title = data['title']
     appl_job_location = data['location']
     appl_job_salary = data['salary']
@@ -229,11 +231,11 @@ def add_Applied():
     
     #all_fav = models.Person.query.filter_by(id=user_id).first()
     all_applied = db.session.query(  # pylint: disable=E1101 
-        models.Person).filter_by(id= global_id ).first()
+        models.Person).filter_by(id= uni_id ).first()
     
     if all_applied is None:
         print("Record is not founded") 
-        new_entry = models.Person(id=global_id, email=global_email,favorites=[] , applied=[appl_job_id])    
+        new_entry = models.Person(id=uni_id, email=global_email,favorites=[] , applied=[appl_job_id])    
         db.session.add(new_entry)
         db.session.commit()
     else:
