@@ -32,7 +32,7 @@ export function Fav (props){
       
     });
   }
-  console.log(fav_list);
+  //console.log(fav_list);
   
   
    useEffect(() => {

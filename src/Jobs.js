@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } fro
 import PropTypes from 'prop-types';
 
 export function Jobs(props){
+    const { google_id } = props;
     const { details } = props;
     const {job_number} = props;
     const test = props.details[0];
@@ -15,13 +16,15 @@ export function Jobs(props){
     const [job_info, set_job_info] = useState({});
     const [title, set_title] = useState([]);
     const [empty, set_empty] = useState(false);
+    const [realID, set_realID] = useState('');
     
-    
+    console.log(google_id);
     
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@This function sends FAVORITED data to backend
-  function sendFavoritedDataToServer(jobTitle, jobLocation, jobSalary, jobId, jobLink) {
+  function sendFavoritedDataToServer(mainID, jobTitle, jobLocation, jobSalary, jobId, jobLink) {
   const url = BASE_URL + "/Favorites";
   var data = JSON.stringify({
+    "user_id": mainID,
     "title":jobTitle,
     "location":jobLocation,
     "salary" : jobSalary,
@@ -52,9 +55,10 @@ export function Jobs(props){
     
 
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@This function sends APPLIED data to backend
-  function sendAppliedDataToServer(jobTitle, jobLocation, jobSalary, jobId, jobLink) {
+  function sendAppliedDataToServer(mainID, jobTitle, jobLocation, jobSalary, jobId, jobLink) {
   const url = BASE_URL + "/Applied";
   var data = JSON.stringify({
+    "user_id": mainID,
     "title":jobTitle,
     "location":jobLocation,
     "salary" : jobSalary,
@@ -94,7 +98,7 @@ export function Jobs(props){
         console.log(details[job_number]);
         console.log("Added to the favourtie");
         
-        sendFavoritedDataToServer(title[0], title[1], title[2], title[3], title[4])
+        sendFavoritedDataToServer(realID, title[0], title[1], title[2], title[3], title[4])
     }
 
 
@@ -105,7 +109,7 @@ export function Jobs(props){
         console.log(details[job_number]);
         console.log("Added to the applied list");
         
-        sendAppliedDataToServer(title[0], title[1], title[2], title[3], title[4])
+        sendAppliedDataToServer(realID, title[0], title[1], title[2], title[3], title[4])
         
     }
     
@@ -118,6 +122,7 @@ export function Jobs(props){
   let title_name ;
   title_name= details[job_number];
   set_title(title_name);
+  set_realID(google_id);
   set_empty(true);
   }, [details]);
   

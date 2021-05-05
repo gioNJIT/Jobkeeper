@@ -48,6 +48,7 @@ function App() {
 }
 
  const [idFavApplied, setidFavApplied] = useState("");
+ const [emailFavApplied, setemailFavApplied] = useState("");
 
 function Login() {
   const onSuccess = (res) => {
@@ -59,6 +60,7 @@ function Login() {
     var user_email = res.profileObj["email"];
     
     setidFavApplied(googleId);
+    setemailFavApplied(user_email);
     sendUserDataToServer(googleId, firstName, user_email);
   };
 
@@ -102,7 +104,7 @@ function Login() {
     <Router>  
         <div>
         <nav>
-            <Link class="button" to="/Home">Home</Link>|
+            <Link to={`/Home/${idFavApplied}`}>Home</Link>|
             <Link class="button" to="/AppliedPage.js">Applied</Link>|
             <Link class="button" to="/Login">Login</Link>|
             <Link class="button" to="/FavoritePage.js">Favorite</Link>|
@@ -116,7 +118,7 @@ function Login() {
             isAuthenticated ? 
             <div>
             
-            <Route path="/Home" component={Home} />
+            <Route path="/Home/:idFavApplied" component={Home}/>
             <Route path="/AppliedPage.js">  <Appliedfunct id = { idFavApplied } /> </Route>
             <Route path="/FavoritePage.js">  <Fav id = { idFavApplied } />   </Route>
             <Route path="/Logout"  component={Logout} />
@@ -136,7 +138,7 @@ function Login() {
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HOMEPAGE COMPONENT    
 const Home = () => {
-
+    const { idFavApplied } = useParams();
     const [occupation, setoccupation] = useState(); //these are the react states that hold the form information
     const [job_details,set_job_details] = useState({});
     const [location, setlocation] = useState();
@@ -183,11 +185,11 @@ const Home = () => {
     let list;
     if (is_shown){
       list = <div className="dark-matter">
-           <Jobs  details={job_details} job_number="0"/>
-           <Jobs  details={job_details} job_number="1"/>
-           <Jobs  details={job_details} job_number="2"/>
-           <Jobs  details={job_details} job_number="3"/>
-           <Jobs  details={job_details} job_number="4"/>
+           <Jobs  details={job_details} job_number="0" google_id={idFavApplied}/>
+           <Jobs  details={job_details} job_number="1" google_id={idFavApplied}/>
+           <Jobs  details={job_details} job_number="2" google_id={idFavApplied}/>
+           <Jobs  details={job_details} job_number="3" google_id={idFavApplied}/>
+           <Jobs  details={job_details} job_number="4" google_id={idFavApplied}/>
            </div>;
     }
     else{
