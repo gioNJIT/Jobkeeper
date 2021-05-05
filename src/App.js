@@ -104,7 +104,7 @@ function Login() {
     <Router>  
         <div>
         <nav>
-            <Link to={`/Home/${idFavApplied}`}>Home</Link>|
+            <Link class="button" to={`/Home/${idFavApplied}`}>Home</Link>|
             <Link class="button" to="/AppliedPage.js">Applied</Link>|
             <Link class="button" to="/Login">Login</Link>|
             <Link class="button" to="/FavoritePage.js">Favorite</Link>|
