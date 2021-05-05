@@ -5,7 +5,7 @@
 
 ## Requirements
 1. `npm install`
-2. `npm install react-google-login`
+2. `npm i react-google-login`
 3. `npm install react-router-dom`
 4. `pip install -r requirements.txt`
 
@@ -17,12 +17,7 @@ and then create credentials for your project,
 [create credentials ](https://developers.google.com/workspace/guides/create-credentials#web).
 Upon following the steps you should have your client id and client secret. 
 > Create a .env file and do the following steps,
->>`export FN_AUTH_REDIRECT_URI=http://localhost:8080/google/auth`
->>`export FN_BASE_URI=http://localhost:8080`
->>`export FN_CLIENT_ID=THE CLIENT ID WHICH YOU CREATED EARLIER`
->>`export FN_CLIENT_SECRET=THE CLIENT SECRET WHICH YOU CREATED EARLIER`
->>`export FLASK_APP=app.py`
->>`export FLASK_DEBUG=1`
->>`export FN_FLASK_SECRET_KEY=SOMETHING RANDOM AND SECRET`
+>>`REACT_APP_GOOGLE_API_KEY=PUT YPUT CLIENT ID HERE`
 
-In your terminal type, `python -m flask run -p 8080`, to get it run.
+
+
