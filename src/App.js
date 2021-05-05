@@ -74,6 +74,11 @@ function Login() {
     <div>
       <GoogleLogin
         clientId={clientId}
+        render={renderProps => (
+        <button class="button" onCLick={renderProps.ocClick} disabled={renderProps.disabled}>
+        Login to JobFind
+        </button>
+        )}
         buttonText="Login"
         onSuccess={onSuccess}
         onFailure={onFailure}
