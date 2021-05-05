@@ -93,9 +93,28 @@ function Login() {
     const [isAuthenticated, setIsAuthenticated] = useState(false); //thi is mocking the login authentication. change to false to test
     
     
+  function handleBackgroundHome() {
+    document.body.style.backgroundImage = "url('https://ak.picdn.net/shutterstock/videos/15071320/thumb/4.jpg') ";
+    // document.body.style.backgroundRepeat = "repeat-y";
+    // document.body.style.backgroundPosition = "0px 150px";
+  };
+  
+  function handleBackgroundFavorites() {
+    document.body.style.backgroundImage = "url('https://i.pinimg.com/736x/96/da/38/96da382665b28aff01e7ffd0d88454b5.jpg')";
+  };
+  
+  function handleBackgroundApplied() {
+    document.body.style.backgroundImage = "url('https://www.clipartmax.com/png/small/1-11037_green-check-mark-transparent.png')";
+  }
   
   
-
+  function handleBackgroundLogin() {
+    document.body.style.backgroundImage = "url('')";
+  }
+  
+    function handleBackgroundLogout() {
+    document.body.style.backgroundImage = "url('')";
+  }
   
   
   console.log(isAuthenticated);
@@ -104,11 +123,12 @@ function Login() {
     <Router>  
         <div>
         <nav>
-            <Link class="button" to={`/Home/${idFavApplied}`}>Home</Link>|
-            <Link class="button" to="/AppliedPage.js">Applied</Link>|
-            <Link class="button" to="/Login">Login</Link>|
-            <Link class="button" to="/FavoritePage.js">Favorite</Link>|
-            <Link class="button" to="/Logout">Logout</Link>
+
+            <Link onClick={handleBackgroundHome} class="button" to="/Home">Home</Link>|
+            <Link onClick={handleBackgroundApplied} class="button" to="/AppliedPage.js">Applied</Link>|
+            <Link onClick={handleBackgroundLogin} class="button" to="/Login">Login</Link>|
+            <Link onClick={handleBackgroundFavorites} class="button" to="/FavoritePage.js">Favorite</Link>|
+            <Link onClick={handleBackgroundLogout} class="button" to="/Logout">Logout</Link>
         </nav>
         <Switch>
             <Route path="/Login"  component={Login} />
@@ -138,6 +158,7 @@ function Login() {
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HOMEPAGE COMPONENT    
 const Home = () => {
+
     const { idFavApplied } = useParams();
     const [occupation, setoccupation] = useState(); //these are the react states that hold the form information
     const [job_details,set_job_details] = useState({});
@@ -267,6 +288,9 @@ const Applied = () => {
 
 
 const Favorites = () => {
+
+  
+  
   var fake_id = "123321";
   const { idFavApplied } = useParams();
   console.log(idFavApplied);

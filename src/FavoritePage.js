@@ -42,13 +42,14 @@ export function Fav (props){
   <div>
   <ul>
     { fav_list.map((item, index) => (
-        <div className="single_entry" >
+         <a href={item[4]}>
+        <div className="dark-matter-favorites">
         <ul> Title: {item[1]}</ul>
         <ul> Location : {item[2]}</ul>
         <ul> Salary : {item[3]}</ul>
         <ul> Id : {item[0]}</ul>
-        <ul> Link: <a href={item[4]}>Take me to the job</a></ul>
-        </div>
+       
+        </div></a>
     )
     )}
    </ul>
@@ -57,3 +58,5 @@ export function Fav (props){
     
 }
 export default Fav;
+
+// <ul> Link: </ul>
