@@ -158,6 +158,9 @@ def add_favourites():
     temp_list = []
     data = request.get_json()
     #data = request.args['favorite'].split(',')
+    print("Returned dictionay from jobs.js")
+    print()
+    print(data)
     uni_id = data['user_id']
     fav_job_title = data['title']
     fav_job_location = data['location']
