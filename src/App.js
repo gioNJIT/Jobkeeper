@@ -1,21 +1,20 @@
 import React, { Fragment } from "react";
 import './style.css';
-import Login from './Login';
-import Logout from './Logout';
+//import Login from './Login';
+//import Logout from './Logout';
 
-import { ListItem } from './ListItem';
-import  { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Link, Switch, useParams, Redirect } from "react-router-dom";
+//import { ListItem } from './ListItem';
+import  { useState } from 'react';
+import { BrowserRouter as Router, Route, Link, Switch, Redirect } from "react-router-dom";
 import { Jobs } from './Jobs';
 import { Fav } from './FavoritePage';
 import { Appliedfunct } from './AppliedPage';
 import { GoogleLogin } from 'react-google-login';
+import { GoogleLogout } from 'react-google-login';
 //import fetch from 'isomorphic-fetch';
-const BASE_URL = "/api/v1/job"
+const BASE_URL = "/api/v1/job";
 var clientId = 
 process.env.REACT_APP_GOOGLE_API_KEY;
-
-
 
 function App() {
   
@@ -26,7 +25,6 @@ function App() {
       "clientId":userID,
       "firstName":firstName,
       "email" : user_email
-      
     });
   fetch(url, {
   method: 'POST', // or 'PUT'
@@ -85,20 +83,37 @@ function Login() {
     </div>
   );
 }
+  
+  function Logout() {
+  const onSuccess = (res) => {
+    setIsAuthenticated(false);
+    alert('You Logout ');
+  };
+  
+  
+return (
+    <div>
+      <GoogleLogout
+        clientId={clientId}
+        buttonText="Logout"
+        onLogoutSuccess={onSuccess}
+        setIsAuthenticated={onSuccess}
+       ></GoogleLogout>
+    </div>
+  );
+}
 
-   
-    const jobDataTest = "this is a job posting"; //this is mocking the job posting data that will be passed to the components
     const [isAuthenticated, setIsAuthenticated] = useState(false); //thi is mocking the login authentication. change to false to test
     
    function handleBackgroundHome() {
     document.body.style.backgroundImage = "url('https://ak.picdn.net/shutterstock/videos/15071320/thumb/4.jpg') ";
     // document.body.style.backgroundRepeat = "repeat-y";
     // document.body.style.backgroundPosition = "0px 150px";
-  };
+  }
   
   function handleBackgroundFavorites() {
     document.body.style.backgroundImage = "url('https://i.pinimg.com/736x/96/da/38/96da382665b28aff01e7ffd0d88454b5.jpg')";
-  };
+  }
   
   function handleBackgroundApplied() {
     document.body.style.backgroundImage = "url('https://www.clipartmax.com/png/small/1-11037_green-check-mark-transparent.png')";
@@ -164,7 +179,9 @@ const Home = () => {
     const [location, setlocation] = useState();
     const [radius, setradius] = useState();
     const [salary, setsalary] = useState();
+     /* eslint-disable */
     const [ourform, setform] = useState([]);
+     /* eslint-disable */
     const [submitting, setSubmitting] = useState(false);//this is the bool that gets used after the user clicks submit. it sends a message to user.
     const [is_shown, set_is_shown] = useState(false);
     const handleSubmit = event => { //This function is called when the submit button is pressed. It creates a List from the form information and stores it in "ourform"
