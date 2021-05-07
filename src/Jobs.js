@@ -18,11 +18,14 @@ export function Jobs(props){
     const [empty, set_empty] = useState(false);
     const [realID, set_realID] = useState('');
     
+    console.log("In the main methid (Jobs.js)");
     console.log(google_id);
     
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@This function sends FAVORITED data to backend
   function sendFavoritedDataToServer(mainID, jobTitle, jobLocation, jobSalary, jobId, jobLink) {
   const url = BASE_URL + "/Favorites";
+  console.log("Before sending to backend");
+  console.log(realID);
   var data = JSON.stringify({
     "user_id": mainID,
     "title":jobTitle,
