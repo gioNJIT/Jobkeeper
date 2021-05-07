@@ -8,7 +8,6 @@ const clientId =
  
  function Logout() {
   const onSuccess = (res) => {
-       window.location.reload(false);
     alert('You Logout ');
   };
   
